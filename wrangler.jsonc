@@ -1,9 +1,16 @@
 {
-  // Cloudflare Pages project config for the MarketBridge mockup.
-  // The static output is the repo root (index.html); `functions/` is auto-detected and
-  // runs the Basic Auth _middleware at the edge. Credentials are Pages env vars/secrets
-  // (BASIC_AUTH_USER / BASIC_AUTH_PASS), never committed here.
+  // Cloudflare Worker that serves the static mockup (index.html) behind Basic Auth.
+  // The Worker (src/index.js) runs first on every request via assets.run_worker_first,
+  // checks BASIC_AUTH_USER / BASIC_AUTH_PASS, then serves the asset through the ASSETS
+  // binding. Deploy with `wrangler deploy` (what the Git build runs). Set the two
+  // credentials as Worker secrets (dashboard or `wrangler secret put ...`); locally use
+  // a gitignored `.dev.vars`. Only index.html ships as an asset (see .assetsignore).
   "name": "marketbridge-mockup",
+  "main": "src/index.js",
   "compatibility_date": "2026-08-16",
-  "pages_build_output_dir": "."
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  }
 }

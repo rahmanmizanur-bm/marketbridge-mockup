@@ -1,0 +1,4 @@
+# Only the mockup page ships as a public static asset. Everything else (Worker source,
+# config, dotfiles) is kept out of the uploaded assets. gitignore-style syntax.
+*
+!index.html
