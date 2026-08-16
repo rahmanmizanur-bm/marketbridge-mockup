@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MarketBridge - full mockup (sample data)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --primary:#4f6af5; --primary-soft:#eef2ff; --bg:#f6f7fb; --card:#fff; --border:#e6e8ee;
+      --fg:#0f172a; --muted:#f1f5f9; --muted-fg:#64748b; --emerald:#10b981; --emerald-soft:#ecfdf5;
+      --red:#ef4444; --red-soft:#fef2f2; --amber:#d97706; --amber-soft:#fffbeb; --violet:#8b5cf6;
+      --violet-soft:#f5f3ff; --sky:#0ea5e9; --sky-soft:#f0f9ff; --indigo-soft:#eef2ff; --slate:#94a3b8;
+      --shadow:0 1px 2px rgba(15,23,42,.04),0 4px 16px rgba(15,23,42,.04);
+      --font:"Plus Jakarta Sans",-apple-system,"Segoe UI",Roboto,sans-serif; --radius:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.45}
+    .app{display:flex;min-height:100vh}
+    a{color:inherit;text-decoration:none}
+
+    /* sidebar */
+    .sidebar{width:248px;flex-shrink:0;background:#0f1629;color:#cbd5e1;display:flex;flex-direction:column;padding:18px 14px;gap:2px;position:sticky;top:0;height:100vh;overflow-y:auto}
+    .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 16px}
+    .brand .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#4f6af5,#8b5cf6);display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px}
+    .brand .name{color:#fff;font-weight:700;font-size:15px;letter-spacing:-.01em}
+    .brand .name small{display:block;color:#64748b;font-weight:500;font-size:11px}
+    .nav-label{color:#475569;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:14px 8px 6px}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;color:#94a3b8;font-weight:500;font-size:13.5px;cursor:pointer;transition:background .15s,color .15s}
+    .nav-item svg{width:17px;height:17px;opacity:.9}
+    .nav-item:hover{background:rgba(255,255,255,.04);color:#e2e8f0}
+    .nav-item.active{background:var(--primary);color:#fff}
+    .sidebar .spacer{flex:1}
+    .user{display:flex;align-items:center;gap:10px;padding:10px 8px;border-top:1px solid rgba(255,255,255,.06);margin-top:8px}
+    .user .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#4f6af5);color:#fff;display:grid;place-items:center;font-weight:700;font-size:12px}
+    .user .who{font-size:12.5px;color:#e2e8f0;font-weight:600}
+    .user .who small{display:block;color:#64748b;font-weight:500}
+
+    /* main */
+    .main{flex:1;min-width:0;display:flex;flex-direction:column}
+    .content{padding:26px 30px 56px;max-width:1300px;width:100%;margin:0 auto}
+    .page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px}
+    .page-head h1{margin:0;font-size:21px;font-weight:700;letter-spacing:-.02em}
+    .page-head p{margin:3px 0 0;color:var(--muted-fg);font-size:13px}
+    .range{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;border:1px solid var(--border);border-radius:10px;background:var(--card);font-weight:600;font-size:13px;box-shadow:var(--shadow)}
+    .range svg{width:15px;height:15px;color:var(--muted-fg)}
+
+    /* blocks */
+    .block{margin-bottom:22px}
+    .kpis{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(175px,1fr))}
+    .kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+    .kpi .k-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-fg)}
+    .kpi .k-value{font-size:25px;font-weight:800;letter-spacing:-.03em;margin-top:6px;font-variant-numeric:tabular-nums}
+    .kpi .k-delta{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:12px;font-weight:600;color:var(--muted-fg)}
+    .k-delta.positive{color:var(--emerald)} .k-delta.negative{color:var(--red)}
+    .k-delta svg{width:13px;height:13px}
+
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .card-pad{padding:18px 20px}
+    .card-head{padding:16px 20px;border-bottom:1px solid var(--border)}
+    .card-head.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .card-head h3{margin:0;font-size:15px;font-weight:700;letter-spacing:-.01em}
+    .card-head p{margin:3px 0 0;font-size:12px;color:var(--muted-fg)}
+    .card-note{font-size:12.5px;color:var(--muted-fg);margin:4px 20px 0}
+
+    .cols{display:grid;gap:20px}
+    .cols.r2-1{grid-template-columns:2fr 1fr} .cols.r1-2{grid-template-columns:1fr 2fr} .cols.r1-1{grid-template-columns:1fr 1fr}
+    .stack>*+*{margin-top:20px}
+
+    .legend{display:flex;flex-wrap:wrap;gap:14px;padding:2px 2px 12px}
+    .legend .li{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted-fg);font-weight:600}
+    .legend .dot{width:9px;height:9px;border-radius:3px}
+    .chart-svg{width:100%;height:auto;display:block}
+    .donut-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+    .donut-legend{width:100%;display:flex;flex-direction:column;gap:7px}
+    .donut-legend .row{display:flex;align-items:center;justify-content:space-between;font-size:13px}
+    .donut-legend .row .l{display:inline-flex;align-items:center;gap:8px}
+    .donut-legend .row .l .dot{width:10px;height:10px;border-radius:50%}
+    .donut-legend .row .v{color:var(--muted-fg);font-variant-numeric:tabular-nums}
+
+    .tiles{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}
+    .tile{border:1px solid var(--border);border-radius:12px;background:var(--card);padding:15px 16px;box-shadow:var(--shadow)}
+    .tile .t-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-fg)}
+    .tile .t-value{font-size:19px;font-weight:800;letter-spacing:-.02em;margin-top:5px;font-variant-numeric:tabular-nums}
+    .tile .t-sub{font-size:12px;color:var(--muted-fg);margin-top:3px}
+    .section-title{font-size:15px;font-weight:700;letter-spacing:-.01em;margin:2px 0 12px}
+    .tone-pos{color:var(--emerald)!important} .tone-neg{color:var(--red)!important}
+
+    table{width:100%;border-collapse:collapse}
+    thead th{text-align:left;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-fg);padding:11px 18px;border-bottom:1px solid var(--border);white-space:nowrap}
+    thead th.r,tbody td.r{text-align:right}
+    tbody td{padding:12px 18px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+    tbody tr:last-child td{border-bottom:0}
+    tbody tr.clickable{cursor:pointer}
+    tbody tr:hover{background:#fafbff}
+    .num{font-variant-numeric:tabular-nums}
+    .strong{font-weight:600;color:var(--fg)}
+    .link{color:var(--primary);font-weight:600}
+    .muted{color:var(--muted-fg)} .xs{font-size:12px}
+    .cell-name{display:flex;align-items:center;gap:9px}
+    .cell-name .av{width:26px;height:26px;border-radius:50%;background:var(--primary-soft);color:var(--primary);font-size:10.5px;font-weight:700;display:grid;place-items:center;flex-shrink:0}
+    .cell-sub{font-size:11.5px;color:var(--muted-fg);margin-top:1px}
+
+    .badge{display:inline-flex;align-items:center;border-radius:6px;padding:2px 8px;font-size:10.5px;font-weight:700;white-space:nowrap;text-transform:capitalize}
+    .b-green{background:var(--emerald-soft);color:#047857} .b-amber{background:var(--amber-soft);color:#b45309}
+    .b-red{background:var(--red-soft);color:#b91c1c} .b-slate{background:var(--muted);color:var(--muted-fg)}
+    .b-indigo{background:var(--indigo-soft);color:#4338ca} .b-violet{background:var(--violet-soft);color:#6d28d9}
+    .b-sky{background:var(--sky-soft);color:#0369a1}
+
+    .bar-rows{display:flex;flex-direction:column;gap:13px}
+    .bar .bar-top{display:flex;align-items:center;justify-content:space-between;font-size:13px;margin-bottom:6px;gap:12px}
+    .bar .track{height:9px;background:var(--muted);border-radius:999px;overflow:hidden}
+    .bar .fill{height:100%;border-radius:999px;background:var(--primary)}
+    .bar .fill.green{background:var(--emerald)} .bar .fill.red{background:var(--red)} .bar .fill.amber{background:var(--amber)} .bar .fill.grey{background:var(--slate)}
+    .bar .note{font-size:11.5px;margin-top:5px;color:var(--muted-fg)}
+    .bar .note.pos{color:var(--emerald)} .bar .note.neg{color:var(--red)}
+
+    .funnel-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+    .funnel-foot{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .pill{border-radius:9px;padding:7px 12px;font-size:12.5px}
+    .pill.rate{background:var(--muted)} .pill.rate b{color:var(--primary);margin-left:5px}
+    .pill.drop{background:var(--red-soft);color:var(--red);font-weight:600}
+
+    .ctrows{display:flex;flex-direction:column;gap:9px}
+    .ctrow{display:flex;align-items:baseline;justify-content:space-between;gap:14px;font-size:13px}
+    .ctrow .l{color:var(--muted-fg)} .ctrow .v{font-weight:600;text-align:right}
+    .ctline{font-size:13px;color:var(--fg);padding:2px 0}
+
+    .timeline{position:relative;padding-left:22px}
+    .timeline:before{content:"";position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:var(--border)}
+    .tl-item{position:relative;padding:0 0 18px}
+    .tl-item:last-child{padding-bottom:0}
+    .tl-item:before{content:"";position:absolute;left:-19px;top:4px;width:9px;height:9px;border-radius:50%;background:var(--primary);border:2px solid #fff;box-shadow:0 0 0 2px var(--primary-soft)}
+    .tl-time{font-size:11px;color:var(--muted-fg);font-weight:600}
+    .tl-title{font-size:13.5px;font-weight:600;margin-top:2px}
+    .tl-desc{font-size:12.5px;color:var(--muted-fg);margin-top:2px}
+    .tl-kind{margin-top:4px}
+
+    .detail-head{margin-bottom:20px}
+    .back{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--muted-fg);font-weight:600;cursor:pointer;margin-bottom:12px}
+    .back:hover{color:var(--primary)}
+    .dh-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+    .dh-meta{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 11px;font-size:12.5px;box-shadow:var(--shadow)}
+    .chip b{font-weight:700}
+
+    .subtabs{display:flex;gap:4px;padding:4px;background:var(--muted);border-radius:12px;margin-bottom:22px;width:fit-content;flex-wrap:wrap}
+    .subtab{appearance:none;border:0;background:transparent;font-family:inherit;font-size:13.5px;font-weight:600;color:var(--muted-fg);padding:8px 16px;border-radius:9px;cursor:pointer;transition:all .15s}
+    .subtab:hover{color:var(--fg)}
+    .subtab.active{background:var(--card);color:var(--primary);box-shadow:var(--shadow)}
+    .subpanel{display:none;animation:fadeUp .35s ease both} .subpanel.active{display:block}
+
+    .toggle-rows{display:flex;flex-direction:column}
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border)}
+    .toggle-row:last-child{border-bottom:0}
+    .switch{width:38px;height:22px;border-radius:999px;background:var(--muted);position:relative;transition:background .15s;flex-shrink:0}
+    .switch.on{background:var(--primary)}
+    .switch:after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+    .switch.on:after{left:18px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .fchip{border:1px solid var(--border);background:var(--card);border-radius:999px;padding:5px 13px;font-size:12.5px;color:var(--muted-fg);font-weight:600}
+    .fchip.active{background:var(--primary-soft);color:var(--primary);border-color:transparent}
+
+    .search{height:36px;width:230px;border:1px solid var(--border);border-radius:9px;padding:0 12px;font-family:inherit;font-size:13px;outline:none}
+    .search:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,106,245,.12)}
+    .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+
+    .page{animation:fadeUp .4s ease both}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .badge-mock{position:fixed;right:16px;bottom:16px;background:#0f1629;color:#fbbf24;font-size:11px;font-weight:700;letter-spacing:.04em;padding:7px 13px;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.2);z-index:50}
+
+    @media (max-width:1024px){ .cols.r2-1,.cols.r1-2,.cols.r1-1{grid-template-columns:1fr} }
+    @media (max-width:820px){
+      .sidebar{display:none} .content{padding:20px 16px 44px}
+      .table-scroll{overflow-x:auto} table{min-width:640px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="main"><div class="content" id="content"></div></div>
+  </div>
+  <div class="badge-mock">MOCKUP - sample data</div>
+
+  <script>
+  /* =====================================================================
+     PAGE SPECS - mirror of apps/web/src/mocks/*.ts + pages/*.vue layout.
+     Sample/mock data only. Punctuation normalised to ASCII.
+     ===================================================================== */
+  const PAGES = {
+  "/": { h1:"Dashboard", subtitle:"RenoLogic platform-wide - Last updated 22 Apr 2026, 9:14 AM", blocks:[
+    { type:"kpis", items:[
+      { label:"MRR", value:"$84.1k", delta:"up 7.8% vs Mar", dir:"up", tone:"positive" },
+      { label:"ARR", value:"$1.01M", delta:"up from $890k", dir:"up", tone:"positive" },
+      { label:"Active Subscribers", value:"1,540", delta:"up 90 vs Mar", dir:"up", tone:"positive" },
+      { label:"Churn Rate", value:"2.4%", delta:"down 0.3pp vs Mar", dir:"down", tone:"positive" } ]},
+    { type:"columns", ratio:"2-1", cols:[
+      [ { type:"lineChart", title:"MRR Trend", subtitle:"Monthly recurring revenue - Apr 2025 to Apr 2026",
+          xAxis:["Apr 25","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan 26","Feb","Mar","Apr 26"],
+          series:[{ name:"MRR", color:"#4F6AF5", data:[50000,52500,55200,58000,61200,64500,68000,71500,74800,78000,80600,82500,84100] }] } ],
+      [ { type:"donut", title:"Revenue by Tier", centerTitle:"Total MRR", centerValue:"$84.1k", slices:[
+          { label:"Enterprise", value:38000, color:"#4F6AF5", display:"$38,000" },
+          { label:"Business Pro", value:26000, color:"#8B5CF6", display:"$26,000" },
+          { label:"Contractor Pro", value:16000, color:"#60A5FA", display:"$16,000" },
+          { label:"Starter", value:4100, color:"#D1D5DB", display:"$4,100" } ] } ] ]},
+    { type:"columns", ratio:"2-1", cols:[
+      [ { type:"lineChart", title:"Subscriber Growth", subtitle:"Active subscribers - May 2025 to Apr 2026",
+          xAxis:["May 25","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan 26","Feb","Mar","Apr 26"],
+          series:[{ name:"Active Subscribers", color:"#8B5CF6", data:[1120,1165,1210,1255,1300,1350,1400,1440,1475,1505,1525,1540] }] } ],
+      [ { type:"table", title:"Top Subscribers by MRR", subtitle:"Highest contributors - Top 5 of $84.1k",
+          columns:[{key:"rank",label:"#"},{key:"name",label:"Account"},{key:"package",label:"Package"},{key:"mrrDisplay",label:"MRR",align:"right"}],
+          rows:[
+            { rank:1, name:"Apex Build Group", initials:"AB", package:"Enterprise", mrrDisplay:"$4,200" },
+            { rank:2, name:"Meridian Constructions", initials:"MC", package:"Enterprise", mrrDisplay:"$3,800" },
+            { rank:3, name:"BlueSky Constructions", initials:"BC", package:"Business Pro", mrrDisplay:"$2,900" },
+            { rank:4, name:"Hammond & Co", initials:"HC", package:"Business Pro", mrrDisplay:"$2,400" },
+            { rank:5, name:"TerraForm Projects", initials:"TP", package:"Business Pro", mrrDisplay:"$2,100" } ],
+          badges:{ col:"package", map:{ "Enterprise":"indigo", "Business Pro":"violet" } } } ] ]},
+    { type:"columns", ratio:"1-1", cols:[
+      [ { type:"tiles", title:"Trial funnel (68% conversion, rolling 30-day)", items:[
+          { label:"Trials started", value:"47" },
+          { label:"Converted", value:"32", sub:"positive", tone:"positive" },
+          { label:"In progress", value:"15" } ] },
+        { type:"barList", title:"Conversion by tier", rows:[
+          { label:"Enterprise", value:"82%", pct:82 },
+          { label:"Business Pro", value:"74%", pct:74 },
+          { label:"Contractor Pro", value:"61%", pct:61 },
+          { label:"Starter", value:"48%", pct:48 } ] } ],
+      [ { type:"lineChart", title:"Conversion rate trend", subtitle:"Nov 2025 - Apr 2026",
+          xAxis:["Nov","Dec","Jan","Feb","Mar","Apr"],
+          series:[
+            { name:"New Trials", color:"#4F6AF5", data:[38,41,44,45,46,47] },
+            { name:"Converted", color:"#10B981", data:[24,26,28,29,31,32] },
+            { name:"Churned", color:"#D1D5DB", data:[6,5,7,6,5,4] } ] } ] ]}
+  ]},
+
+  "/subscribers": { h1:"Subscribers", subtitle:"All active subscriptions across your products",
+    toolbar:{ search:true, filters:["All statuses","All packages","All add-ons","All charges"] }, blocks:[
+    { type:"kpis", items:[
+      { label:"Active subscribers", value:"412", delta:"up 18 this month", dir:"up", tone:"positive" },
+      { label:"MRR", value:"$47,830", delta:"up $2,140 vs last month", dir:"up", tone:"positive" },
+      { label:"In trial", value:"34", delta:"14 expiring this week" },
+      { label:"At risk / dunning", value:"9", delta:"up 3 vs last week", dir:"up", tone:"negative" } ]},
+    { type:"table", title:"Subscribers", search:true, rowLink:"/subscribers/1",
+      columns:[{key:"subscriber",label:"Subscriber"},{key:"product",label:"Product - Package"},{key:"status",label:"Status"},{key:"mrr",label:"MRR",align:"right"},{key:"addOns",label:"Add-ons"},{key:"nextBilling",label:"Next billing"}],
+      rows:[
+        { subscriber:"Sarah Chen  sarah@buildright.com.au", product:"RenoLogic - Contractor Pro", status:"active", mrr:"$50.00", addOns:"Advanced Reporting", nextBilling:"15 May 2026" },
+        { subscriber:"Marcus Webb  marcus@webb-constructions.com", product:"RenoLogic - Business Pro", status:"active", mrr:"$120.00", addOns:"None", nextBilling:"1 May 2026" },
+        { subscriber:"Aisha Patel  aisha@patelhomes.com.au", product:"RenoLogic - Starter", status:"trial", mrr:"$0.00", addOns:"None", nextBilling:"Expires 28 Apr" },
+        { subscriber:"Tom Bradley  tom@bradleybuild.com.au", product:"RenoLogic - Enterprise", status:"active", mrr:"$350.00", addOns:"API Access + Advanced Reporting", nextBilling:"1 Jun 2026" },
+        { subscriber:"Jen Wu  jen@wucontracting.com", product:"RenoLogic - Contractor Pro", status:"dunning", mrr:"$50.00", addOns:"None", nextBilling:"Overdue" },
+        { subscriber:"Alex Nguyen  alex@nguyenbuilds.com.au", product:"RenoLogic - Business Pro", status:"suspended", mrr:"$120.00", addOns:"None", nextBilling:"42 days overdue" },
+        { subscriber:"Claire Foster  claire@fosterdesign.com.au", product:"RenoLogic - Starter", status:"lapsed", mrr:"$0.00", addOns:"None", nextBilling:"Lapsed Oct 2025" },
+        { subscriber:"David Santos  david@santos-reno.com.au", product:"RenoLogic - Business Pro", status:"active", mrr:"$120.00", addOns:"White-label Export", nextBilling:"8 May 2026" } ],
+      badges:{ col:"status", map:{ "active":"green","trial":"amber","dunning":"amber","suspended":"red","lapsed":"slate","cancelled":"slate" } } }
+  ]},
+
+  "/subscribers/:id": { h1:"Tom Bradley", subtitle:"tom@bradleybuild.com.au - Enterprise - Subscriber since Jun 2024", back:"/subscribers", blocks:[
+    { type:"detailHeader", badges:[{text:"active",tone:"green"},{text:"Healthy",tone:"green"}],
+      meta:[{label:"Email",value:"tom@bradleybuild.com.au"},{label:"Package",value:"Enterprise"},{label:"Since",value:"Jun 2024"}] },
+    { type:"kpis", items:[
+      { label:"MRR", value:"$350.00", delta:"per month" },
+      { label:"Lifetime value", value:"$8,750", delta:"since Jun 2024", tone:"positive" },
+      { label:"Tenure", value:"1 yr 11 mo" },
+      { label:"Renews in", value:"18 days", delta:"15 May 2026" },
+      { label:"Seats", value:"4 / 10", delta:"40% used" } ]},
+    { type:"columns", ratio:"2-1", cols:[
+      [ { type:"cardText", title:"Subscription", lines:[
+            "Product: RenoLogic Subscription","Package: Enterprise","Billing period: Monthly","MRR: $350.00","Next renewal: 15 May 2026","Currency: AUD","Seats: 4 / 10 used (40%)" ] },
+        { type:"cardText", title:"Contract & Deal", subtitle:"Enterprise", lines:[
+            "Contract value: $4,200.00","Deal stage: Pending Confirmation","Contract start: 1 Jun 2024","Contract end: 31 May 2027","Account owner: Sales - RenoLogic","Pro-forma invoice: Pending (managed in Exsited - read-only)" ] },
+        { type:"table", title:"Charges",
+          columns:[{key:"charge",label:"Charge"},{key:"amount",label:"Amount",align:"right"},{key:"applied",label:"Applied"},{key:"invoice",label:"Invoice"},{key:"status",label:"Status"}],
+          rows:[
+            { charge:"Setup Fee", amount:"$500.00", applied:"1 Jun 2024", invoice:"INV-00041", status:"paid" },
+            { charge:"Data Migration", amount:"$1,200.00", applied:"2 Jun 2024", invoice:"INV-00043", status:"paid" } ],
+          badges:{ col:"status", map:{ "paid":"green" } } } ],
+      [ { type:"timeline", title:"Activity Feed", items:[
+            { time:"02 Jun 2026 - 09:14", title:"Customer Registration", desc:"Account created via checkout widget", kind:"account" },
+            { time:"02 Jun 2026 - 09:15", title:"Welcome Email Sent", desc:"Onboarding series - step 1 delivered", kind:"email" },
+            { time:"02 Jun 2026 - 09:22", title:"Browsed Plans", desc:"Viewed Contractor Pro & Business Pro pages", kind:"usage" },
+            { time:"02 Jun 2026 - 09:31", title:"Subscription Started", desc:"Enterprise - monthly - AUD", kind:"subscription" },
+            { time:"02 Jun 2026 - 09:31", title:"First Invoice Paid", desc:"INV-00142 - $50.00 - Visa ..42", kind:"billing" },
+            { time:"05 Jun 2026 - 14:03", title:"Searched Catalogue", desc:'Query: "advanced reporting"', kind:"usage" },
+            { time:"08 Jun 2026 - 11:47", title:"Add-on Attach", desc:"Advanced Reporting +$20/mo", kind:"subscription" } ] },
+        { type:"cardText", title:"Active add-ons", lines:["API Access: Metered","Advanced Reporting: $20.00 / mo"] } ] ]}
+  ]},
+
+  "/campaigns": { h1:"Campaigns", subtitle:"Promotional sends and event-triggered flow automations", blocks:[
+    { type:"tabs", tabs:[{label:"Campaigns",value:"campaigns"},{label:"Flow Automations",value:"flows"}], panels:{
+      campaigns:[
+        { type:"kpis", items:[
+          { label:"Emails sent (30d)", value:"4,821", delta:"up 12% vs last period", dir:"up", tone:"positive" },
+          { label:"Open rate", value:"38.4%", delta:"up 3.1pp", dir:"up", tone:"positive" },
+          { label:"Click rate", value:"14.7%", delta:"up 1.8pp", dir:"up", tone:"positive" },
+          { label:"Bounce rate", value:"1.2%", delta:"Within target" },
+          { label:"Active flows", value:"2", delta:"1 draft" } ]},
+        { type:"table", title:"Campaigns", search:true, rowLink:"/campaigns/1",
+          columns:[{key:"name",label:"Name"},{key:"status",label:"Status"},{key:"sentDate",label:"Sent date"},{key:"opens",label:"Opens",align:"right"},{key:"clicks",label:"Clicks",align:"right"},{key:"recipients",label:"Recipients",align:"right"}],
+          rows:[
+            { name:"Trial Expiry Reminder", trigger:"7d before trial ends", status:"active", sentDate:"26 May 2026", opens:"312 (42%)", clicks:"88 (12%)", recipients:"742" },
+            { name:"At-Risk Win-back", trigger:"risk score > 70", status:"active", sentDate:"24 May 2026", opens:"156 (38%)", clicks:"41 (10%)", recipients:"410" },
+            { name:"Onboarding Flow", trigger:"new subscription created", status:"active", sentDate:"22 May 2026", opens:"489 (51%)", clicks:"132 (14%)", recipients:"959" },
+            { name:"Payment Failed Dunning", trigger:"payment failure event", status:"active", sentDate:"21 May 2026", opens:"67 (29%)", clicks:"22 (9%)", recipients:"231" },
+            { name:"Churned Re-engagement", trigger:"cancellation + 7d", status:"active", sentDate:"20 May 2026", opens:"98 (33%)", clicks:"19 (6%)", recipients:"297" },
+            { name:"Annual Upsell", trigger:"60d on monthly plan", status:"paused", sentDate:"18 May 2026", opens:"203 (35%)", clicks:"54 (9%)", recipients:"580" },
+            { name:"Feature Announcement", trigger:"Promotional - Send once", status:"draft", sentDate:"-", opens:"-", clicks:"-", recipients:"0" } ],
+          badges:{ col:"status", map:{ active:"green", paused:"slate", draft:"slate" } } } ],
+      flows:[
+        { type:"kpis", items:[
+          { label:"Active flows", value:"7", delta:"Running live" },
+          { label:"Paused", value:"1", delta:"Needs attention" },
+          { label:"Draft", value:"1", delta:"Not yet live" },
+          { label:"Open rate", value:"41.2%", delta:"up 2.4pp", dir:"up", tone:"positive" },
+          { label:"Bounce rate", value:"0.9%", delta:"Within target" },
+          { label:"Conversion", value:"12.6%", delta:"up 1.1pp", dir:"up", tone:"positive" } ]},
+        { type:"table", title:"Flow Automations", subtitle:"Event-triggered flows - dunning, onboarding, renewal, lifecycle", search:true, rowLink:"/flows/1",
+          columns:[{key:"name",label:"Name"},{key:"counts",label:"Counts"},{key:"status",label:"Status"},{key:"updatedOn",label:"Updated"},{key:"openRate",label:"Open",align:"right"},{key:"bounceRate",label:"Bounce",align:"right"},{key:"conversion",label:"Conv",align:"right"}],
+          rows:[
+            { name:"Default Dunning", counts:"1,240 sent - 1,230 delivered - 10 bounced", status:"active", updatedOn:"03 Jun 2026", openRate:"31%", bounceRate:"0.8%", conversion:"12%" },
+            { name:"Enterprise Dunning Override", counts:"86 sent - 86 delivered - 0 bounced", status:"active", updatedOn:"02 Jun 2026", openRate:"28%", bounceRate:"0.5%", conversion:"9%" },
+            { name:"Annual Plan Dunning", counts:"320 sent - 318 delivered - 2 bounced", status:"active", updatedOn:"02 Jun 2026", openRate:"34%", bounceRate:"0.7%", conversion:"11%" },
+            { name:"Welcome Series", counts:"2,180 sent - 2,160 delivered - 20 bounced", status:"active", updatedOn:"03 Jun 2026", openRate:"51%", bounceRate:"0.9%", conversion:"14%" },
+            { name:"Trial Onboarding", counts:"540 sent - 534 delivered - 6 bounced", status:"active", updatedOn:"24 May 2026", openRate:"47%", bounceRate:"1.1%", conversion:"12%" },
+            { name:"Renewal Reminder Series", counts:"3,120 sent - 3,100 delivered - 20 bounced", status:"active", updatedOn:"03 Jun 2026", openRate:"42%", bounceRate:"0.6%", conversion:"18%" },
+            { name:"Trial Expiry Notice", counts:"410 sent - 407 delivered - 3 bounced", status:"active", updatedOn:"28 May 2026", openRate:"39%", bounceRate:"0.8%", conversion:"8%" },
+            { name:"Win-back Campaign", counts:"890 sent - 875 delivered - 15 bounced", status:"paused", updatedOn:"22 May 2026", openRate:"22%", bounceRate:"1.7%", conversion:"4%" },
+            { name:"Q2 Upgrade Push", counts:"0 sent - 0 delivered - 0 bounced", status:"draft", updatedOn:"-", openRate:"-", bounceRate:"-", conversion:"-" } ],
+          badges:{ col:"status", map:{ active:"green", paused:"slate", draft:"slate" } } } ]
+    } }
+  ]},
+
+  "/campaigns/:id": { h1:"Trial Expiry Reminder", subtitle:"Email - Trigger: 7d before trial ends - Audience: Trial contractors (742) - Sent 26 May 2026", back:"/campaigns", blocks:[
+    { type:"detailHeader", badges:[{text:"active",tone:"green"}],
+      meta:[{label:"Audience",value:"Trial contractors (742)"},{label:"Sent",value:"26 May 2026"},{label:"Trigger",value:"7d before trial ends"}] },
+    { type:"tiles", title:"Funnel", items:[
+      { label:"Sent", value:"742", sub:"recipients" },
+      { label:"Delivered", value:"742", sub:"100%" },
+      { label:"Opened", value:"312", sub:"42%" },
+      { label:"Clicked", value:"88", sub:"12%" },
+      { label:"Converted", value:"41", sub:"6%", tone:"positive" } ]},
+    { type:"columns", ratio:"2-1", cols:[
+      [ { type:"lineChart", title:"Engagement over time", subtitle:"Daily delivery and engagement",
+          xAxis:["26 May","27 May","28 May","29 May","30 May","31 May","01 Jun","02 Jun","03 Jun","04 Jun","05 Jun"],
+          series:[
+            { name:"Sent", color:"#4F6AF5", data:[20,110,180,312,250,150,90,55,35,22,15] },
+            { name:"Opened", color:"#10B981", data:[8,45,78,132,100,62,40,25,16,10,6] },
+            { name:"Clicked", color:"#F59E0B", data:[2,12,22,38,28,18,11,7,5,3,2] },
+            { name:"Bounced", color:"#EF4444", data:[1,2,2,3,2,1,1,1,0,0,0] },
+            { name:"Conversions", color:"#8B5CF6", data:[1,5,9,12,10,7,5,3,2,1,1] } ] },
+        { type:"table", title:"Recipients", subtitle:"Read-only - delivery managed in Umerang",
+          columns:[{key:"recipient",label:"Recipient"},{key:"opens",label:"Opens",align:"right"},{key:"clicks",label:"Clicks",align:"right"},{key:"status",label:"Status"}],
+          rows:[
+            { recipient:"Sarah Chen  sarah@buildright.com.au", opens:"3", clicks:"1", status:"clicked" },
+            { recipient:"Tom Bradley  tom@bradleybuild.com.au", opens:"4", clicks:"2", status:"clicked" },
+            { recipient:"Marcus Webb  marcus@webb-constructions.com", opens:"2", clicks:"0", status:"opened" },
+            { recipient:"Aisha Patel  aisha@patelhomes.com.au", opens:"1", clicks:"0", status:"opened" },
+            { recipient:"David Santos  david@santos-reno.com.au", opens:"2", clicks:"1", status:"clicked" },
+            { recipient:"Alex Nguyen  alex@nguyenbuilds.com.au", opens:"1", clicks:"0", status:"opened" },
+            { recipient:"Jen Wu  jen@wucontracting.com", opens:"0", clicks:"0", status:"delivered" },
+            { recipient:"Claire Foster  claire@fosterdesign.com.au", opens:"0", clicks:"0", status:"bounced" } ],
+          badges:{ col:"status", map:{ clicked:"green", opened:"slate", delivered:"slate", bounced:"red" } } } ],
+      [ { type:"cardText", title:"Campaign", lines:["Audience: Trial contractors (742)","Sent: 26 May 2026","Type: Email","Trigger: 7d before trial ends"] },
+        { type:"barList", title:"Benchmark", subtitle:"vs average of last 5 campaigns", rows:[
+            { label:"Open rate", value:"42%", pct:42, tone:"success", note:"+4pp vs avg (38%)" },
+            { label:"Click rate", value:"12%", pct:12, tone:"success", note:"+2pp vs avg (10%)" } ] },
+        { type:"cardText", title:"Totals", lines:["Total Sent: 742","Successful Deliveries: 742","Total Opens: 312","Total Clicks: 88","Bounces: 6","Conversions: 41","Conversion Rate: 6%","Conversion Value: 2,050 AUD"] } ] ]}
+  ]},
+
+  "/flows/:id": { h1:"Default Dunning", subtitle:"Contractors enter this flow when a subscription payment fails - Trigger: payment_failed", back:"/campaigns", blocks:[
+    { type:"detailHeader", badges:[{text:"active",tone:"green"}], meta:[{label:"Trigger",value:"payment_failed"},{label:"Recipients",value:"1,240"}] },
+    { type:"tiles", title:"Funnel", items:[
+      { label:"Entered", value:"1,240", sub:"contacts" },
+      { label:"Delivered", value:"1,230", sub:"99%" },
+      { label:"Opened", value:"381", sub:"31%" },
+      { label:"Clicked", value:"172", sub:"14%" },
+      { label:"Recovered", value:"148", sub:"12%", tone:"positive" } ]},
+    { type:"columns", ratio:"2-1", cols:[
+      [ { type:"timeline", title:"Flow steps", subtitle:"Read-only - the sequence and rules are configured in Umerang", items:[
+            { time:"Trigger", title:"Payment failed", desc:"Trigger event: payment_failed", kind:"trigger" },
+            { time:"Send email", title:"Card declined - action needed", desc:"1,240 sent - 34% open - 14% click", kind:"email" },
+            { time:"Wait", title:"Wait 2 days", desc:"Resume after wait", kind:"wait" },
+            { time:"Split", title:"Payment recovered?", desc:"Yes 210 - No 1,030", kind:"split" },
+            { time:"Send email", title:"Second reminder - update payment", desc:"No branch - 1,030 sent - 28% open - 11% click", kind:"email" },
+            { time:"Wait", title:"Wait 3 days", desc:"Resume after wait", kind:"wait" },
+            { time:"Split", title:"Payment recovered?", desc:"Yes 90 - No 940", kind:"split" },
+            { time:"Send email", title:"Final notice - subscription at risk", desc:"No branch - 940 sent - 22% open - 8% click", kind:"email" },
+            { time:"Add to list", title:"At-risk contractors", desc:"Hands off to the win-back flow", kind:"list" },
+            { time:"Exit", title:"Exit flow", desc:"Recovered or reached final step", kind:"exit" } ] } ],
+      [ { type:"cardText", title:"Flow details", lines:["Trigger: payment_failed","Recipients: 1,240","Created: 03 Jun 2026","Last updated: 03 Jun 2026"] },
+        { type:"cardText", title:"Configured in Umerang", lines:["This flow is configured and running in Umerang. MarketBridge shows it read-only - to change the trigger, steps, or emails, edit it in Umerang."] } ] ]}
+  ]},
+
+  "/analytics": { h1:"Analytics & Reporting", subtitle:"Platform-wide metrics - April 2026", blocks:[
+    { type:"tabs", tabs:[{label:"Overview",value:"overview"},{label:"Revenue",value:"revenue"},{label:"Subscribers",value:"subscribers"},{label:"Payments",value:"payments"}], panels:{
+      overview:[
+        { type:"kpis", items:[
+          { label:"MRR", value:"$84.1k", delta:"up 7.8%", dir:"up", tone:"positive" },
+          { label:"ARR", value:"$1.01M", delta:"up from $890k", dir:"up", tone:"positive" },
+          { label:"Active Subscribers", value:"1,540", delta:"up 90", dir:"up", tone:"positive" },
+          { label:"Churn Rate", value:"2.4%", delta:"down 0.3pp", dir:"down", tone:"positive" },
+          { label:"Avg Revenue / User", value:"$54.60", delta:"up $2.10", dir:"up", tone:"positive" } ]},
+        { type:"columns", ratio:"2-1", cols:[
+          [ { type:"lineChart", title:"Monthly Recurring Revenue", subtitle:"Jan - Dec 2025",
+              xAxis:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+              series:[{ name:"MRR", color:"#4F6AF5", data:[42000,45000,47000,51000,54000,58000,62000,66000,71000,76000,80000,84100] }] } ],
+          [ { type:"donut", title:"Revenue Mix", subtitle:"Apr 2026 by source", centerTitle:"total MRR", centerValue:"$84k", slices:[
+              { label:"Subscription", value:65600, color:"#4F6AF5", display:"$65.6k" },
+              { label:"Platform Fees", value:14300, color:"#10B981", display:"$14.3k" },
+              { label:"Other", value:4200, color:"#8B5CF6", display:"$4.2k" } ] },
+            { type:"cardText", title:"Expansion MRR +$6.7k", lines:["plan upgrades this month"] } ] ]},
+        { type:"tiles", title:"Key Metrics - Apr 2026", items:[
+          { label:"New subscribers", value:"142", sub:"+18", tone:"positive" },
+          { label:"Churned", value:"52", sub:"-6", tone:"positive" },
+          { label:"Net new", value:"90", sub:"+24", tone:"positive" },
+          { label:"Plan upgrades", value:"34", sub:"+9", tone:"positive" },
+          { label:"Plan downgrades", value:"11", sub:"+2", tone:"negative" },
+          { label:"Payment success", value:"94.2%", sub:"+0.8pp", tone:"positive" },
+          { label:"Dunning recovery", value:"32%", sub:"+4pp", tone:"positive" },
+          { label:"Open exceptions", value:"4", sub:"blocking", tone:"negative" } ]},
+        { type:"cardText", title:"Platform milestone", lines:["ARR crossed $1M this month. MRR growth held at 7-8% MoM with Net Revenue Retention of 108%."] } ],
+      revenue:[
+        { type:"lineChart", title:"Monthly Revenue Breakdown", subtitle:"Subscription vs Platform Fees - Jan-Nov 2025",
+          xAxis:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov"],
+          series:[
+            { name:"Subscription", color:"#4F6AF5", data:[40000,42000,44000,47000,50000,54000,58000,62000,66000,70000,76400] },
+            { name:"Platform Fees", color:"#10B981", data:[3000,3200,3400,3600,3800,4200,4600,5000,5200,5400,5180] } ] },
+        { type:"columns", ratio:"1-1", cols:[
+          [ { type:"barList", title:"Revenue Summary - Apr 2026", rows:[
+              { label:"Subscription revenue", value:"$76,400", pct:0 },
+              { label:"Platform fees - collected", value:"$5,180", pct:0 },
+              { label:"Platform fees - held", value:"$2,540", pct:0 },
+              { label:"Total invoiced", value:"$84,120", pct:0 },
+              { label:"Refunds / credits", value:"-$1,240", pct:0, tone:"negative" },
+              { label:"Net revenue", value:"$82,880", pct:0, tone:"positive" } ] } ],
+          [ { type:"barList", title:"Tax & Compliance Summary", note:"Download Tax Report", rows:[
+              { label:"GST collected (10%)", value:"$8,288", pct:0 },
+              { label:"Withholding tax held", value:"$4,144", pct:0 },
+              { label:"Super obligations", value:"$3,102", pct:0 },
+              { label:"BAS period", value:"Q2 2026", pct:0 } ] } ] ]},
+        { type:"table", title:"Revenue by Plan - Apr 2026",
+          columns:[{key:"plan",label:"Plan"},{key:"active",label:"Active",align:"right"},{key:"mrr",label:"MRR",align:"right"},{key:"avg",label:"Avg / sub",align:"right"},{key:"mom",label:"MoM",align:"right"},{key:"churn",label:"Churn",align:"right"}],
+          rows:[
+            { plan:"Enterprise", active:"48", mrr:"$28,800", avg:"$600.00", mom:"+12.5%", churn:"0.8%" },
+            { plan:"Professional", active:"312", mrr:"$31,200", avg:"$100.00", mom:"+8.3%", churn:"2.1%" },
+            { plan:"Starter", active:"1,180", mrr:"$24,120", avg:"$20.44", mom:"+6.1%", churn:"3.4%" } ] } ],
+      subscribers:[
+        { type:"columns", ratio:"2-1", cols:[
+          [ { type:"lineChart", title:"Churn Rate Trend", subtitle:"Monthly churn % - Jan-Dec 2025",
+              xAxis:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+              series:[{ name:"Churn %", color:"#EF4444", data:[4.2,4.0,3.8,3.6,3.4,3.2,3.0,2.9,2.8,2.6,2.5,2.4] }] } ],
+          [ { type:"barList", title:"Plan Distribution", rows:[
+              { label:"Starter", value:"1,180 - 76.6%", pct:76.6, tone:"grey" },
+              { label:"Professional", value:"312 - 20.3%", pct:20.3 },
+              { label:"Enterprise", value:"48 - 3.1%", pct:3.1 } ] } ] ]},
+        { type:"tiles", title:"Retention Metrics", items:[
+          { label:"1-month retention", value:"97.6%", tone:"positive" },
+          { label:"3-month retention", value:"91.4%", tone:"positive" },
+          { label:"6-month retention", value:"83.2%" },
+          { label:"12-month retention", value:"72.8%" },
+          { label:"Avg subscriber LTV", value:"$876" } ]},
+        { type:"table", title:"Monthly Activity - 2025",
+          columns:[{key:"month",label:"Month"},{key:"nw",label:"New",align:"right"},{key:"churned",label:"Churned",align:"right"},{key:"net",label:"Net",align:"right"},{key:"totalActive",label:"Active",align:"right"},{key:"churn",label:"Churn",align:"right"},{key:"mrr",label:"MRR",align:"right"}],
+          rows:[
+            { month:"Jan 2025", nw:"+73", churned:"-30", net:"+43", totalActive:"820", churn:"4.2%", mrr:"$42k" },
+            { month:"Feb 2025", nw:"+81", churned:"-31", net:"+50", totalActive:"870", churn:"4.0%", mrr:"$45k" },
+            { month:"Mar 2025", nw:"+85", churned:"-33", net:"+52", totalActive:"910", churn:"3.8%", mrr:"$47k" },
+            { month:"Apr 2025", nw:"+93", churned:"-34", net:"+59", totalActive:"960", churn:"3.6%", mrr:"$51k" },
+            { month:"May 2025", nw:"+100", churned:"-38", net:"+62", totalActive:"1,020", churn:"3.4%", mrr:"$54k" },
+            { month:"Jun 2025", nw:"+110", churned:"-40", net:"+70", totalActive:"1,090", churn:"3.2%", mrr:"$58k" },
+            { month:"Jul 2025", nw:"+117", churned:"-42", net:"+75", totalActive:"1,150", churn:"3.0%", mrr:"$62k" },
+            { month:"Dec 2025", nw:"+130", churned:"-52", net:"+90", totalActive:"1,540", churn:"2.4%", mrr:"$84k" } ] } ],
+      payments:[
+        { type:"columns", ratio:"1-1", cols:[
+          [ { type:"barList", title:"Payment Success Rate", subtitle:"Last 30 days - all attempts", note:"94.2% up 0.8pp vs last period", rows:[
+              { label:"Successful", value:"4,534", pct:94.0, tone:"green" },
+              { label:"Declined (card)", value:"198", pct:4.1, tone:"red" },
+              { label:"Insufficient funds", value:"56", pct:1.2, tone:"amber" },
+              { label:"Gateway error", value:"33", pct:0.7, tone:"grey" },
+              { label:"Total attempts", value:"4,821", pct:0 } ] } ],
+          [ { type:"funnel", cards:[
+              { title:"Dunning Recovery Funnel", subtitle:"Apr 2026 - all failed payments",
+                steps:[
+                  { label:"Payment Failed", count:287, pct:100, dropNote:"Entered dunning flow" },
+                  { label:"Attempt 1 Sent", count:244, pct:84, dropNote:"85% opened email" },
+                  { label:"Attempt 2 Sent", count:156, pct:68, dropNote:"Reached day 4" },
+                  { label:"Recovered", count:92, pct:52, dropNote:"Payment updated - 32%" },
+                  { label:"Cancelled", count:195, pct:36, dropNote:"Subscription ended - 68%", isFinal:true } ],
+                overallRate:"32%", biggestDropoff:"Recovery target: 35% - currently 3pp below" } ] } ] ]},
+        { type:"table", title:"Payout Summary - Apr 2026",
+          columns:[{key:"contractor",label:"Contractor"},{key:"invoices",label:"Invoices",align:"right"},{key:"gross",label:"Gross",align:"right"},{key:"fee",label:"Platform Fee",align:"right"},{key:"net",label:"Net Payout",align:"right"},{key:"status",label:"Status"}],
+          rows:[
+            { contractor:"RenoLogic", invoices:"8", gross:"$12,400", fee:"$620", net:"$11,780", status:"Settled" },
+            { contractor:"BuildTrack Pro", invoices:"12", gross:"$18,900", fee:"$945", net:"$17,955", status:"Settled" },
+            { contractor:"SafeWork Systems", invoices:"5", gross:"$7,200", fee:"$360", net:"$6,840", status:"Pending" },
+            { contractor:"Priya Nair", invoices:"3", gross:"$2,100", fee:"$0", net:"$2,100", status:"Held - Exception" } ],
+          badges:{ col:"status", map:{ "Settled":"green", "Pending":"amber", "Held - Exception":"red" } } } ]
+    } }
+  ]},
+
+  "/billing": { h1:"Billing & Payments", subtitle:"Payments, ledger and financial reconciliation", blocks:[
+    { type:"tabs", tabs:[{label:"Invoices",value:"invoices"},{label:"Payouts",value:"payouts"},{label:"Verification",value:"verification"}], panels:{
+      invoices:[
+        { type:"kpis", items:[
+          { label:"Outstanding invoices", value:"$24,830", delta:"9 overdue", tone:"negative" },
+          { label:"Payouts this month", value:"$187,440", delta:"up 11.2%", dir:"up", tone:"positive" },
+          { label:"Open issues", value:"3", delta:"2 breaching SLA" },
+          { label:"Last reconciled", value:"Today 09:14", delta:"All records matched" } ]},
+        { type:"chips", items:["All","Subscription","Platform Fee","Pro-Forma (2)","Ad-hoc (0)"] },
+        { type:"table", title:"Recent Invoices", subtitle:"All invoice types - current billing period",
+          columns:[{key:"id",label:"Invoice #"},{key:"subscriber",label:"Subscriber"},{key:"type",label:"Type"},{key:"amount",label:"Amount",align:"right"},{key:"status",label:"Status"},{key:"date",label:"Date",align:"right"}],
+          rows:[
+            { id:"PF-2026-0028", subscriber:"Tom Bradley (Enterprise)", type:"Pro-Forma", amount:"$4,200.00", status:"awaiting payment", date:"1 Apr 2026" },
+            { id:"PF-2026-0019", subscriber:"Westfield Constructions (Enterprise)", type:"Pro-Forma", amount:"$6,800.00", status:"pending", date:"14 Mar 2026" },
+            { id:"INV-2026-0341", subscriber:"Priya Nair", type:"Subscription", amount:"$50.00", status:"paid", date:"26 Mar 2026" },
+            { id:"INV-2026-0340", subscriber:"Jake Mortimer", type:"Platform Fee", amount:"$142.80", status:"paid", date:"25 Mar 2026" },
+            { id:"INV-2026-0339", subscriber:"Sandra Wu", type:"Platform Fee", amount:"$238.00", status:"held", date:"25 Mar 2026" },
+            { id:"INV-2026-0338", subscriber:"Rachel Huang", type:"Subscription", amount:"$50.00", status:"paid", date:"24 Mar 2026" },
+            { id:"INV-2026-0337", subscriber:"Troy Andersen", type:"Platform Fee", amount:"$87.00", status:"paid", date:"24 Mar 2026" },
+            { id:"INV-2026-0336", subscriber:"Darren Patel", type:"Platform Fee", amount:"$310.00", status:"held", date:"23 Mar 2026" },
+            { id:"INV-2026-0335", subscriber:"Grace Kim", type:"Subscription", amount:"$50.00", status:"overdue", date:"21 Mar 2026" },
+            { id:"INV-2026-0334", subscriber:"Ben Stafford", type:"Subscription", amount:"$50.00", status:"overdue", date:"19 Mar 2026" },
+            { id:"INV-2026-0333", subscriber:"Mei Tanaka", type:"Platform Fee", amount:"$96.60", status:"paid", date:"18 Mar 2026" },
+            { id:"INV-2026-0332", subscriber:"Connor Walsh", type:"Platform Fee", amount:"$175.50", status:"held", date:"17 Mar 2026" } ],
+          badges:{ col:"status", map:{ "paid":"green", "awaiting payment":"amber", "pending":"amber", "held":"amber", "overdue":"red" } } } ],
+      payouts:[
+        { type:"kpis", items:[
+          { label:"Escrow balance", value:"$241,380", delta:"Held on behalf of RenoLogic" },
+          { label:"Dispute holdback", value:"$4,920", delta:"3 open items" },
+          { label:"Available to release", value:"$236,460", delta:"Ralph gate cleared - 94 txns", tone:"positive" },
+          { label:"Next release", value:"30 Apr 2026", delta:"Scheduled - T+2 settlement" } ]},
+        { type:"chips", items:["All","Held","Released","Withheld (3)"] },
+        { type:"table", title:"Escrow & Payout Ledger", subtitle:"Individual transactions - hold, release and disbursement status",
+          columns:[{key:"ref",label:"Payment ref"},{key:"subscriber",label:"Subscriber"},{key:"plan",label:"Plan"},{key:"amount",label:"Amount",align:"right"},{key:"received",label:"Received"},{key:"gate",label:"Gate"},{key:"status",label:"Status"}],
+          rows:[
+            { ref:"ESC-2026-0102", subscriber:"Ben Stafford  ben@stafford.com.au", plan:"Business Pro", amount:"$120.00", received:"1 Apr 2026", gate:"4/4 cleared", status:"released" },
+            { ref:"ESC-2026-0098", subscriber:"Sarah McKinley  sarah@mckinley.com", plan:"Contractor Pro", amount:"$50.00", received:"1 Apr 2026", gate:"4/4 cleared", status:"released" },
+            { ref:"ESC-2026-0094", subscriber:"Grace Kim  grace.kim@buildwise.com.au", plan:"Contractor Pro", amount:"$50.00", received:"28 Mar 2026", gate:"4/4 cleared", status:"released" },
+            { ref:"ESC-2026-0091", subscriber:"Connor Walsh  c.walsh@walshbuilders.com", plan:"Business Pro", amount:"$120.00", received:"28 Mar 2026", gate:"4/4 cleared", status:"released" },
+            { ref:"ESC-2026-0115", subscriber:"Marcus Webb  m.webb@webbconstruct.com.au", plan:"Enterprise", amount:"$4,200.00", received:"14 Apr 2026", gate:"4/4 cleared", status:"held" },
+            { ref:"ESC-2026-0118", subscriber:"Liu Feng  lfeng@fengrealty.com.au", plan:"Business Pro", amount:"$120.00", received:"15 Apr 2026", gate:"4/4 cleared", status:"held" },
+            { ref:"ESC-2026-0122", subscriber:"Rachel Huang  r.huang@huangdev.com.au", plan:"Contractor Pro", amount:"$50.00", received:"20 Apr 2026", gate:"4/4 cleared", status:"held" },
+            { ref:"ESC-2026-0124", subscriber:"Troy Andersen  t.andersen@troybuild.com", plan:"Business Pro", amount:"$120.00", received:"22 Apr 2026", gate:"4/4 cleared", status:"held" },
+            { ref:"ESC-2026-0121", subscriber:"Jordan Tran  jordan@tran-construction.com", plan:"Contractor Pro", amount:"$50.00", received:"18 Apr 2026", gate:"CB dispute", status:"withheld" },
+            { ref:"ESC-2026-0109", subscriber:"Priya Nair  p.nair@nairgroup.com.au", plan:"Business Pro", amount:"$120.00", received:"10 Apr 2026", gate:"CB blocked", status:"withheld" } ],
+          badges:{ col:"status", map:{ "released":"green", "held":"amber", "withheld":"red" } } } ],
+      verification:[
+        { type:"kpis", items:[
+          { label:"Verified today", value:"38", delta:"All checks passed", tone:"positive" },
+          { label:"Failed verification", value:"2", delta:"Action required", tone:"negative" },
+          { label:"Flagged - anomaly", value:"3", delta:"Under review" },
+          { label:"Avg verification time", value:"1.4s", delta:"down 0.3s this week", dir:"down", tone:"positive" } ]},
+        { type:"chips", items:["All","Passed","Failed","Flagged"] },
+        { type:"table", title:"Transaction Verification Log", subtitle:"Today - 43 transactions processed",
+          columns:[{key:"txn",label:"Transaction"},{key:"contractor",label:"Contractor"},{key:"amount",label:"Amount",align:"right"},{key:"checks",label:"Checks (SO/PO - Auth - Ledger - Anomaly)"},{key:"result",label:"Result"},{key:"time",label:"Time",align:"right"}],
+          rows:[
+            { txn:"TXN-00894", contractor:"Jake Mortimer", amount:"$4,760.00", checks:"OK - OK - OK - OK", result:"verified", time:"09:22 AM" },
+            { txn:"TXN-00893", contractor:"Sandra Wu", amount:"$2,900.00", checks:"OK - OK - OK - OK", result:"verified", time:"08:47 AM" },
+            { txn:"TXN-00892", contractor:"Ben Stafford", amount:"$1,850.00", checks:"FAIL - OK - FAIL - warn", result:"failed", time:"07:18 AM" },
+            { txn:"TXN-00891", contractor:"Rachel Huang", amount:"$6,200.00", checks:"OK - OK - OK - OK", result:"verified", time:"06:55 AM" },
+            { txn:"TXN-00890", contractor:"Troy Andersen", amount:"$2,900.00", checks:"OK - OK - OK - OK", result:"verified", time:"06:10 AM" },
+            { txn:"TXN-00889", contractor:"Grace Kim", amount:"$3,400.00", checks:"OK - OK - OK - warn", result:"flagged", time:"25 Mar 11:40 PM" },
+            { txn:"TXN-00886", contractor:"Priya Nair", amount:"$2,100.00", checks:"OK - OK - warn - warn", result:"flagged", time:"25 Mar 08:05 PM" },
+            { txn:"TXN-00888", contractor:"Darren Patel", amount:"$6,200.00", checks:"OK - OK - OK - OK", result:"verified", time:"25 Mar 09:22 PM" },
+            { txn:"TXN-00885", contractor:"Connor Walsh", amount:"$890.00", checks:"OK - OK - OK - warn", result:"flagged", time:"25 Mar 02:30 PM" },
+            { txn:"TXN-00887", contractor:"Marco De Luca", amount:"$1,200.00", checks:"OK - FAIL - FAIL - warn", result:"failed", time:"25 Mar 03:12 PM" } ],
+          badges:{ col:"result", map:{ "verified":"green", "flagged":"amber", "failed":"red" } } } ]
+    } }
+  ]},
+
+  "/engagement": { h1:"Web & Engagement", subtitle:"Behavioural analytics from the Umerang collector - read-only", blocks:[
+    { type:"tabs", tabs:[{label:"Overview",value:"overview"},{label:"Real-time",value:"realtime"},{label:"Traffic",value:"traffic"},{label:"Funnels",value:"funnels"},{label:"Events",value:"events"}], panels:{
+      overview:[
+        { type:"kpis", items:[
+          { label:"Visitors", value:"3,240", delta:"up 8.2% vs last period", dir:"up", tone:"positive" },
+          { label:"Sign-ups", value:"201", delta:"up 24 vs last period", dir:"up", tone:"positive" },
+          { label:"Signup conversion", value:"6.2%", delta:"up 0.4pp", dir:"up", tone:"positive" },
+          { label:"Subscription rev (7d)", value:"$18,450", delta:"up 6.1%", dir:"up", tone:"positive" },
+          { label:"Active accounts (7d)", value:"412", delta:"up 18", dir:"up", tone:"positive" } ]},
+        { type:"columns", ratio:"2-1", cols:[
+          [ { type:"lineChart", title:"Traffic & sign-ups - last 7 days", subtitle:"Sessions vs new sign-ups",
+              xAxis:["04 Aug","05 Aug","06 Aug","07 Aug","08 Aug","09 Aug","10 Aug"],
+              series:[
+                { name:"Sessions", color:"#4F6AF5", data:[380,420,510,470,540,610,590] },
+                { name:"Sign-ups", color:"#10B981", data:[22,26,31,28,33,39,34] } ] } ],
+          [ { type:"donut", title:"Traffic by source", subtitle:"Sessions by channel", centerTitle:"Sessions", centerValue:"3,240", slices:[
+              { label:"App", value:48, color:"#4F6AF5", display:"48%" },
+              { label:"Direct", value:27, color:"#8B5CF6", display:"27%" },
+              { label:"Email", value:15, color:"#60A5FA", display:"15%" },
+              { label:"Organic", value:10, color:"#D1D5DB", display:"10%" } ] } ] ]},
+        { type:"tiles", title:"Insights", items:[
+          { label:"Top plan", value:"Business Pro", sub:"34 sign-ups this period" },
+          { label:"Abandoned sign-ups", value:"18", sub:"$1,620 recoverable" },
+          { label:"Peak activity", value:"7 - 9 PM", sub:"38% of daily events" },
+          { label:"Email vs Organic", value:"2x", sub:"Email converts at 2x organic" },
+          { label:"Repeat funders", value:"22%", sub:"of homeowners fund > 1 job" } ]},
+        { type:"tiles", title:"Segments", items:[
+          { label:"Trial contractors", value:"34", sub:"up 12 this week" },
+          { label:"At-risk / dunning", value:"9", sub:"up 3 this week", tone:"negative" },
+          { label:"High-MRR (Enterprise)", value:"18", sub:"stable", tone:"positive" },
+          { label:"Active homeowners", value:"210", sub:"up 24 this week" } ]} ],
+      realtime:[
+        { type:"kpis", items:[
+          { label:"Live visitors", value:"37" },
+          { label:"Events / 5 min", value:"142" },
+          { label:"Sign-ups / hr", value:"6" },
+          { label:"Revenue / hr", value:"$780" } ]},
+        { type:"columns", ratio:"1-2", cols:[
+          [ { type:"barList", title:"Active users by country", subtitle:"37 active users - 4 countries", rows:[
+              { label:"Australia", value:"22", pct:100 },
+              { label:"Bangladesh", value:"9", pct:41 },
+              { label:"United States", value:"4", pct:18 },
+              { label:"New Zealand", value:"2", pct:9 } ] } ],
+          [ { type:"table", title:"Live activity", subtitle:"Most recent events across the platform (read-only)",
+              columns:[{key:"time",label:"Time"},{key:"email",label:"Audience"},{key:"event",label:"Event"},{key:"value",label:"Value",align:"right"},{key:"location",label:"Location"}],
+              rows:[
+                { time:"10 Aug 2026 07:45 PM", email:"brazil@buildright.com.au", event:"milestone_funded", value:"$4,000", location:"Sydney, Australia" },
+                { time:"10 Aug 2026 07:44 PM", email:"owner12@renohome.com.au", event:"job_posted", value:"-", location:"Melbourne, Australia" },
+                { time:"10 Aug 2026 07:42 PM", email:"kenya@renovations.com.au", event:"quote_submitted", value:"-", location:"Sylhet, Bangladesh" },
+                { time:"10 Aug 2026 07:41 PM", email:"sarah@buildright.com.au", event:"subscription_created", value:"$50", location:"Brisbane, Australia" },
+                { time:"10 Aug 2026 07:40 PM", email:"guest", event:"page_view", value:"-", location:"Auckland, New Zealand" },
+                { time:"10 Aug 2026 07:39 PM", email:"tom@bradleybuild.com.au", event:"escrow_released", value:"$4,000", location:"Sydney, Australia" },
+                { time:"10 Aug 2026 07:38 PM", email:"guest", event:"sign_up", value:"-", location:"Dhaka, Bangladesh" },
+                { time:"10 Aug 2026 07:36 PM", email:"aisha@patelhomes.com.au", event:"page_view", value:"-", location:"Perth, Australia" } ] } ] ]} ],
+      traffic:[
+        { type:"table", title:"Traffic by source", subtitle:"Sessions, visitors, revenue and return by channel",
+          columns:[{key:"source",label:"Source"},{key:"sessions",label:"Sessions",align:"right"},{key:"visitors",label:"Visitors",align:"right"},{key:"revenue",label:"Revenue",align:"right"},{key:"convPct",label:"Conv %",align:"right"},{key:"roas",label:"ROAS",align:"right"}],
+          rows:[
+            { source:"App", sessions:"1,555", visitors:"1,210", revenue:"$8,850", convPct:"6.8%", roas:"4.2x" },
+            { source:"Direct", sessions:"875", visitors:"690", revenue:"$4,980", convPct:"5.4%", roas:"-" },
+            { source:"Email", sessions:"486", visitors:"402", revenue:"$3,120", convPct:"7.9%", roas:"6.1x" },
+            { source:"Organic", sessions:"324", visitors:"268", revenue:"$1,500", convPct:"3.9%", roas:"-" } ] },
+        { type:"columns", ratio:"1-1", cols:[
+          [ { type:"donut", title:"Sessions by source", centerTitle:"Sessions", centerValue:"3,240", slices:[
+              { label:"App", value:1555, color:"#4F6AF5", display:"1,555" },
+              { label:"Direct", value:875, color:"#8B5CF6", display:"875" },
+              { label:"Email", value:486, color:"#60A5FA", display:"486" },
+              { label:"Organic", value:324, color:"#D1D5DB", display:"324" } ] } ],
+          [ { type:"donut", title:"Revenue by source", centerTitle:"Revenue", centerValue:"$18.5k", slices:[
+              { label:"App", value:8850, color:"#4F6AF5", display:"$8,850" },
+              { label:"Direct", value:4980, color:"#8B5CF6", display:"$4,980" },
+              { label:"Email", value:3120, color:"#60A5FA", display:"$3,120" },
+              { label:"Organic", value:1500, color:"#D1D5DB", display:"$1,500" } ] } ] ]} ],
+      funnels:[
+        { type:"funnel", cards:[
+          { title:"Contractor sign-up", subtitle:"Visit -> Sign up -> Plan selected -> Subscription active",
+            steps:[
+              { label:"Visit", count:3240, pct:100 },
+              { label:"Sign up", count:201, pct:6.2, dropNote:"3,039 left (94% drop)" },
+              { label:"Plan selected", count:168, pct:5.2, dropNote:"33 left (16% drop)" },
+              { label:"Subscription active", count:149, pct:4.6, dropNote:"19 left (11% drop)", isFinal:true } ],
+            overallRate:"4.6%", biggestDropoff:"Visit -> Sign up (94% drop)" },
+          { title:"Homeowner job funding", subtitle:"Visit -> Post job -> Accept quote -> Fund escrow",
+            steps:[
+              { label:"Visit", count:2110, pct:100 },
+              { label:"Post job", count:420, pct:19.9, dropNote:"1,690 left (80% drop)" },
+              { label:"Accept quote", count:198, pct:9.4, dropNote:"222 left (53% drop)" },
+              { label:"Fund escrow", count:156, pct:7.4, dropNote:"42 left (21% drop)", isFinal:true } ],
+            overallRate:"7.4%", biggestDropoff:"Visit -> Post job (80% drop)" } ] } ],
+      events:[
+        { type:"lineChart", title:"Event volume - last 7 days", subtitle:"Top events by day",
+          xAxis:["04 Aug","05 Aug","06 Aug","07 Aug","08 Aug","09 Aug","10 Aug"],
+          series:[
+            { name:"page_view", color:"#4F6AF5", data:[380,420,510,470,540,610,590] },
+            { name:"sign_up", color:"#10B981", data:[22,26,31,28,33,39,34] },
+            { name:"job_posted", color:"#8B5CF6", data:[48,52,61,55,66,71,67] },
+            { name:"milestone_funded", color:"#D97706", data:[9,12,14,11,13,16,13] },
+            { name:"escrow_released", color:"#60A5FA", data:[7,10,11,9,12,13,10] } ] },
+        { type:"table", title:"Event catalogue", subtitle:"Every tracked CDP event and its volume (read-only)", search:true,
+          columns:[{key:"name",label:"Event name"},{key:"countDisplay",label:"Count",align:"right"},{key:"users",label:"Users",align:"right"},{key:"perUser",label:"Per user",align:"right"},{key:"revenue",label:"Revenue",align:"right"}],
+          rows:[
+            { name:"page_view", countDisplay:"2,950 (44.1%)", users:"1,210", perUser:"2.44", revenue:"$0.00" },
+            { name:"session_start", countDisplay:"940 (14.1%)", users:"812", perUser:"1.16", revenue:"$0.00" },
+            { name:"job_viewed", countDisplay:"720 (10.8%)", users:"540", perUser:"1.33", revenue:"$0.00" },
+            { name:"job_posted", countDisplay:"420 (6.3%)", users:"388", perUser:"1.08", revenue:"$0.00" },
+            { name:"quote_submitted", countDisplay:"315 (4.7%)", users:"210", perUser:"1.50", revenue:"$0.00" },
+            { name:"sign_up", countDisplay:"201 (3.0%)", users:"201", perUser:"1.00", revenue:"$0.00" },
+            { name:"subscription_created", countDisplay:"149 (2.2%)", users:"149", perUser:"1.00", revenue:"$7,300.00" },
+            { name:"milestone_funded", countDisplay:"88 (1.3%)", users:"74", perUser:"1.19", revenue:"$0.00" },
+            { name:"escrow_released", countDisplay:"72 (1.1%)", users:"66", perUser:"1.09", revenue:"$0.00" },
+            { name:"app_crashed", countDisplay:"14 (0.2%)", users:"12", perUser:"1.17", revenue:"$0.00" } ] } ]
+    } }
+  ]},
+
+  "/settings": { h1:"Settings", subtitle:"Personalise your view - show, hide and reorder what you see", blocks:[
+    { type:"tabs", tabs:[{label:"General",value:"general"},{label:"Subscribers",value:"subs"},{label:"Campaigns",value:"camp"},{label:"Billing",value:"bill"},{label:"Analytics",value:"ana"},{label:"Web & Engagement",value:"eng"}], panels:{
+      general:[
+        { type:"toggleList", title:"Navigation", subtitle:"Show or hide sidebar tabs. Dashboard always stays available.", items:[
+          { label:"Subscribers", on:true },
+          { label:"Campaigns", on:true },
+          { label:"Billing & Payments", on:true },
+          { label:"Analytics & Reporting", on:true },
+          { label:"Web & Engagement", on:true } ]},
+        { type:"toggleList", title:"Dashboard cards", subtitle:"Show, hide and reorder the cards on your Dashboard.", items:[
+          { label:"KPI summary", on:true },
+          { label:"MRR Trend", on:true },
+          { label:"Revenue by Tier", on:true },
+          { label:"Subscriber Growth", on:true },
+          { label:"Top Subscribers", on:true },
+          { label:"Trial Conversion", on:true } ]} ],
+      subs:[ { type:"toggleList", title:"Subscriber list", subtitle:"Show or hide sections on the Subscribers list.", items:[
+          { label:"KPI row", on:true },{ label:"Filters toolbar", on:true },{ label:"Table", on:true } ]},
+        { type:"toggleList", title:"Subscriber detail", subtitle:"Show or hide sections on the subscriber detail page.", items:[
+          { label:"KPI row", on:true },{ label:"Subscription card", on:true },{ label:"Contract & Deal", on:true },{ label:"Charges", on:true },{ label:"Activity feed", on:true } ]} ],
+      camp:[ { type:"toggleList", title:"Campaigns", subtitle:"Show or hide the KPI row and tabs on Campaigns.", items:[
+          { label:"KPI row", on:true },{ label:"Campaigns tab", on:true },{ label:"Flow Automations tab", on:true } ]} ],
+      bill:[ { type:"toggleList", title:"Billing & Payments", subtitle:"Show or hide the KPI row and tabs on Billing.", items:[
+          { label:"Invoices tab", on:true },{ label:"Payouts tab", on:true },{ label:"Verification tab", on:true } ]} ],
+      ana:[ { type:"toggleList", title:"Analytics & Reporting", subtitle:"Show or hide the KPI row and tabs on Analytics.", items:[
+          { label:"Overview tab", on:true },{ label:"Revenue tab", on:true },{ label:"Subscribers tab", on:true },{ label:"Payments tab", on:true } ]} ],
+      eng:[ { type:"toggleList", title:"Web & Engagement", subtitle:"Show or hide the tabs on Web & Engagement.", items:[
+          { label:"Overview tab", on:true },{ label:"Real-time tab", on:true },{ label:"Traffic tab", on:true },{ label:"Funnels tab", on:true },{ label:"Events tab", on:true } ]} ]
+    } }
+  ]}
+  };
+
+  /* nav (mirror components/layout/nav-items.ts) */
+  const IC = {
+    grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+    layers:'<path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/>',
+    send:'<path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>',
+    dollar:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+    bar:'<path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="12" y="6" width="3" height="11"/><rect x="17" y="13" width="3" height="4"/>',
+    activity:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+    gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'
+  };
+  const NAV = [
+    { heading:"Overview", items:[{ label:"Dashboard", path:"/", icon:"grid" }] },
+    { heading:"Operations", items:[
+      { label:"Subscribers", path:"/subscribers", icon:"layers" },
+      { label:"Campaigns", path:"/campaigns", icon:"send" },
+      { label:"Billing & Payments", path:"/billing", icon:"dollar" } ] },
+    { heading:"Intelligence", items:[
+      { label:"Analytics & Reporting", path:"/analytics", icon:"bar" },
+      { label:"Web & Engagement", path:"/engagement", icon:"activity" } ] }
+  ];
+
+  /* ============================ helpers ============================ */
+  const esc = (s) => String(s==null?"":s).replace(/[·—–]/g,"-").replace(/[""]/g,'"').replace(/['']/g,"'").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const ARROW = (d)=> d==="down" ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>';
+  let uid = 0;
+
+  function toneClass(t){
+    t = String(t||"").toLowerCase();
+    if (["green","success","positive","released","verified","settled","paid"].includes(t)) return "b-green";
+    if (["amber","warning","held","pending","flagged","trial","dunning","scheduled","sending"].includes(t)) return "b-amber";
+    if (["red","danger","negative","failed","withheld","overdue","suspended","bounced"].includes(t)) return "b-red";
+    if (["indigo","order"].includes(t)) return "b-indigo";
+    if (["violet","event"].includes(t)) return "b-violet";
+    if (["sky","view"].includes(t)) return "b-sky";
+    return "b-slate";
+  }
+  function fillClass(t){
+    t = String(t||"").toLowerCase();
+    if (["green","success","positive"].includes(t)) return "green";
+    if (["red","danger","negative"].includes(t)) return "red";
+    if (["amber","warning"].includes(t)) return "amber";
+    if (["grey","gray","slate","default","muted"].includes(t)) return "grey";
+    return "";
+  }
+
+  function lineChart(cfg, height){
+    height = height || 300;
+    const W=820,H=height,padL=44,padR=14,padT=14,padB=28,plotW=W-padL-padR,plotH=H-padT-padB;
+    const all=cfg.series.flatMap(s=>s.data); let max=Math.max(...all,1);
+    const step=Math.pow(10,Math.floor(Math.log10(max))); max=Math.ceil(max/step)*step;
+    const n=cfg.xAxis.length;
+    const x=i=>padL+(n===1?plotW/2:(i*plotW)/(n-1));
+    const y=v=>padT+plotH-(v/max)*plotH;
+    let svg=`<svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">`;
+    for(let g=0;g<=4;g++){ const gv=(max/4)*g, gy=y(gv);
+      svg+=`<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="#eef1f6" stroke-width="1"/>`;
+      svg+=`<text x="${padL-8}" y="${gy+4}" text-anchor="end" font-size="11" fill="#94a3b8">${gv>=1000?(gv/1000)+"k":gv}</text>`; }
+    cfg.xAxis.forEach((lbl,i)=>{ svg+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="11" fill="#94a3b8">${esc(lbl)}</text>`; });
+    const s0=cfg.series[0]; let area=`M ${x(0)} ${y(s0.data[0])}`;
+    s0.data.forEach((v,i)=>{ if(i) area+=` L ${x(i)} ${y(v)}`; });
+    area+=` L ${x(n-1)} ${padT+plotH} L ${x(0)} ${padT+plotH} Z`;
+    const gid="g"+(++uid);
+    svg+=`<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${s0.color}" stop-opacity="0.18"/><stop offset="100%" stop-color="${s0.color}" stop-opacity="0"/></linearGradient></defs>`;
+    svg+=`<path d="${area}" fill="url(#${gid})"/>`;
+    cfg.series.forEach(s=>{ let d=""; s.data.forEach((v,i)=>{ d+=(i?" L ":"M ")+x(i)+" "+y(v); });
+      svg+=`<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+      s.data.forEach((v,i)=>{ svg+=`<circle cx="${x(i)}" cy="${y(v)}" r="3" fill="#fff" stroke="${s.color}" stroke-width="2"/>`; }); });
+    svg+=`</svg>`;
+    const legend=`<div class="legend">${cfg.series.map(s=>`<span class="li"><span class="dot" style="background:${s.color}"></span>${esc(s.name)}</span>`).join("")}</div>`;
+    return legend+svg;
+  }
+  function donut(b){
+    const slices=b.slices||[], r=60,cx=80,cy=80,sw=22,C=2*Math.PI*r;
+    const total=slices.reduce((a,s)=>a+(+s.value||0),0)||1; let off=0,arcs="";
+    slices.forEach(s=>{ const len=((+s.value||0)/total)*C;
+      arcs+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.color}" stroke-width="${sw}" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 ${cx} ${cy})"/>`; off+=len; });
+    const svg=`<svg viewBox="0 0 160 160" width="160" height="160">${arcs}<text x="80" y="74" text-anchor="middle" font-size="11" fill="#94a3b8" font-weight="600">${esc(b.centerTitle||"")}</text><text x="80" y="94" text-anchor="middle" font-size="18" fill="#0f172a" font-weight="800">${esc(b.centerValue||"")}</text></svg>`;
+    const legend=`<div class="donut-legend">${slices.map(s=>`<div class="row"><span class="l"><span class="dot" style="background:${s.color}"></span>${esc(s.label)}</span><span class="v">${esc(s.display)}</span></div>`).join("")}</div>`;
+    return `<div class="donut-wrap">${svg}${legend}</div>`;
+  }
+
+  function cardHead(title, subtitle, extra){
+    if(!title && !subtitle) return "";
+    return `<div class="card-head${extra?" row":""}"><div><h3>${esc(title||"")}</h3>${subtitle?`<p>${esc(subtitle)}</p>`:""}</div>${extra||""}</div>`;
+  }
+
+  function nameCell(val, row){
+    if(row && row.initials){
+      return `<div class="cell-name"><span class="av">${esc(row.initials)}</span><span>${esc(val)}</span></div>`;
+    }
+    if(row && row.trigger){
+      return `<div><div class="strong">${esc(val)}</div><div class="cell-sub">Trigger: ${esc(row.trigger)}</div></div>`;
+    }
+    const parts=String(val).split(/\s{2,}/);
+    if(parts.length>1){
+      return `<div><div class="strong">${esc(parts[0])}</div><div class="cell-sub">${esc(parts.slice(1).join(" "))}</div></div>`;
+    }
+    return `<span class="strong">${esc(val)}</span>`;
+  }
+
+  function renderTable(b){
+    const search = b.search ? `<input class="search" oninput="filterTable(this)" placeholder="Search...">` : "";
+    const head = cardHead(b.title, b.subtitle, search || (b.title?"":undefined));
+    const cols = b.columns||[];
+    const ths = cols.map(c=>`<th class="${c.align==="right"?"r":""}">${esc(c.label)}</th>`).join("");
+    const rowClick = b.rowLink ? ` class="clickable" onclick="nav('${b.rowLink}')"` : "";
+    const trs = (b.rows||[]).map(row=>{
+      const tds = cols.map(c=>{
+        let v = row[c.key];
+        const isName = ["name","subscriber","recipient","account","contractor"].includes(c.key);
+        if(b.badges && b.badges.col===c.key){
+          return `<td><span class="badge ${toneClass((b.badges.map||{})[v]||v)}">${esc(v)}</span></td>`;
+        }
+        if(isName) return `<td>${nameCell(v,row)}</td>`;
+        return `<td class="${c.align==="right"?"r num":""}">${esc(v)}</td>`;
+      }).join("");
+      return `<tr${rowClick}>${tds}</tr>`;
+    }).join("");
+    return `<div class="card">${head}<div class="table-scroll"><table><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table></div></div>`;
+  }
+
+  function renderKpis(b){
+    return `<div class="kpis">${b.items.map(k=>{
+      const delta = k.delta ? `<div class="k-delta ${k.tone||""}">${k.dir?ARROW(k.dir):""}${esc(k.delta)}</div>` : "";
+      return `<div class="kpi"><div class="k-label">${esc(k.label)}</div><div class="k-value">${esc(k.value)}</div>${delta}</div>`;
+    }).join("")}</div>`;
+  }
+  function renderTiles(b){
+    const title = b.title?`<h3 class="section-title">${esc(b.title)}</h3>`:"";
+    return `${title}<div class="tiles">${b.items.map(t=>{
+      const tonec = t.tone==="positive"?"tone-pos":t.tone==="negative"?"tone-neg":"";
+      return `<div class="tile"><div class="t-label">${esc(t.label)}</div><div class="t-value">${esc(t.value)}</div>${t.sub?`<div class="t-sub ${tonec}">${esc(t.sub)}</div>`:""}</div>`;
+    }).join("")}</div>`;
+  }
+  function renderBarList(b){
+    const note = b.note?`<div class="card-note">${esc(b.note)}</div>`:"";
+    const rows = (b.rows||[]).map(r=>{
+      const fc = fillClass(r.tone);
+      const track = r.pct ? `<div class="track"><div class="fill ${fc}" style="width:${Math.max(Math.min(r.pct,100),2)}%"></div></div>` : "";
+      const notec = r.tone && ["green","success","positive"].includes(String(r.tone).toLowerCase()) ? "pos" : (r.tone && ["red","danger","negative"].includes(String(r.tone).toLowerCase()) ? "neg" : "");
+      const nt = r.note?`<div class="note ${notec}">${esc(r.note)}</div>`:"";
+      return `<div class="bar"><div class="bar-top"><span class="strong">${esc(r.label)}</span><span class="muted num">${esc(r.value)}</span></div>${track}${nt}</div>`;
+    }).join("");
+    return `<div class="card">${cardHead(b.title,b.subtitle)}${note}<div class="card-pad"><div class="bar-rows">${rows}</div></div></div>`;
+  }
+  function renderCardText(b){
+    const body = (b.lines||[]).map(l=>{
+      const i = String(l).indexOf(": ");
+      if(i>0 && i<40) return `<div class="ctrow"><span class="l">${esc(l.slice(0,i))}</span><span class="v">${esc(l.slice(i+2))}</span></div>`;
+      return `<div class="ctline">${esc(l)}</div>`;
+    }).join("");
+    return `<div class="card">${cardHead(b.title,b.subtitle)}<div class="card-pad"><div class="ctrows">${body}</div></div></div>`;
+  }
+  function renderTimeline(b){
+    const items=(b.items||[]).map(it=>`<div class="tl-item"><div class="tl-time">${esc(it.time)}</div><div class="tl-title">${esc(it.title)}</div>${it.desc?`<div class="tl-desc">${esc(it.desc)}</div>`:""}${it.kind?`<div class="tl-kind"><span class="badge ${toneClass(it.kind)}">${esc(it.kind)}</span></div>`:""}</div>`).join("");
+    return `<div class="card">${cardHead(b.title,b.subtitle)}<div class="card-pad"><div class="timeline">${items}</div></div></div>`;
+  }
+  function renderFunnel(b){
+    const cards=(b.cards||[]).map(f=>{
+      const steps=f.steps.map(s=>`<div class="bar"><div class="bar-top"><span class="strong">${esc(s.label)}</span><span class="muted num">${(+s.count).toLocaleString()} (${s.pct}%)</span></div><div class="track"><div class="fill ${s.isFinal?"green":""}" style="width:${Math.max(s.pct,2)}%"></div></div>${s.dropNote?`<div class="note neg">${esc(s.dropNote)}</div>`:""}</div>`).join("");
+      return `<div class="card card-pad"><h3 style="margin:0;font-size:15px;font-weight:700">${esc(f.title)}</h3>${f.subtitle?`<p class="muted" style="margin:3px 0 16px;font-size:12px">${esc(f.subtitle)}</p>`:""}<div class="bar-rows">${steps}</div><div class="funnel-foot"><span class="pill rate">Overall rate <b>${esc(f.overallRate)}</b></span><span class="pill drop">Biggest drop-off: ${esc(f.biggestDropoff)}</span></div></div>`;
+    }).join("");
+    return `<div class="funnel-grid">${cards}</div>`;
+  }
+  function renderDetailHeader(b){
+    const back = window.__back ? `<div class="back" onclick="nav('${window.__back}')">&larr; Back</div>` : "";
+    const badges = (b.badges||[]).map(x=>`<span class="badge ${toneClass(x.tone)}">${esc(x.text)}</span>`).join("");
+    const meta = (b.meta||[]).map(m=>`<span class="chip"><span class="muted">${esc(m.label)}</span> <b>${esc(m.value)}</b></span>`).join("");
+    return `<div class="detail-head">${back}${badges?`<div class="dh-badges">${badges}</div>`:""}${meta?`<div class="dh-meta">${meta}</div>`:""}</div>`;
+  }
+  function renderToggle(b){
+    const rows=(b.items||[]).map(it=>`<div class="toggle-row"><span class="strong">${esc(it.label)}</span><span class="switch ${it.on?"on":""}" onclick="this.classList.toggle('on')"></span></div>`).join("");
+    return `<div class="card">${cardHead(b.title,b.subtitle)}<div class="card-pad"><div class="toggle-rows">${rows}</div></div></div>`;
+  }
+  function renderChips(b){
+    return `<div class="block chips">${(b.items||[]).map((c,i)=>`<span class="fchip ${i===0?"active":""}">${esc(c)}</span>`).join("")}</div>`;
+  }
+  function renderTabsBlock(b){
+    const gid="tg"+(++uid);
+    const btns=b.tabs.map((t,i)=>`<button class="subtab ${i===0?"active":""}" data-g="${gid}" data-v="${t.value}" onclick="switchSub('${gid}','${t.value}')">${esc(t.label)}</button>`).join("");
+    const panels=b.tabs.map((t,i)=>`<div class="subpanel ${i===0?"active":""}" data-g="${gid}" data-v="${t.value}">${renderBlocks(b.panels[t.value]||[])}</div>`).join("");
+    return `<div class="subtabs">${btns}</div>${panels}`;
+  }
+  function renderColumns(b){
+    const cls = b.ratio==="1-2"?"r1-2":b.ratio==="1-1"?"r1-1":"r2-1";
+    return `<div class="cols ${cls}">${b.cols.map(col=>`<div class="stack">${renderBlocks(col)}</div>`).join("")}</div>`;
+  }
+
+  function renderBlock(b){
+    switch(b.type){
+      case "kpis": return renderKpis(b);
+      case "lineChart": return `<div class="card">${cardHead(b.title,b.subtitle)}<div class="card-pad">${lineChart(b,300)}</div></div>`;
+      case "donut": return `<div class="card">${cardHead(b.title,b.subtitle)}<div class="card-pad">${donut(b)}</div></div>`;
+      case "barList": return renderBarList(b);
+      case "table": return renderTable(b);
+      case "tiles": return renderTiles(b);
+      case "cardText": return renderCardText(b);
+      case "timeline": return renderTimeline(b);
+      case "funnel": return renderFunnel(b);
+      case "detailHeader": return renderDetailHeader(b);
+      case "toggleList": return renderToggle(b);
+      case "chips": return renderChips(b);
+      case "tabs": return renderTabsBlock(b);
+      case "columns": return renderColumns(b);
+      default: return "";
+    }
+  }
+  function renderBlocks(blocks){ return (blocks||[]).map(b=>`<div class="block">${renderBlock(b)}</div>`).join(""); }
+
+  /* ============================ router + shell ============================ */
+  function resolve(path){
+    if(PAGES[path]) return path;
+    if(/^\/subscribers\/[^/]+$/.test(path)) return "/subscribers/:id";
+    if(/^\/campaigns\/[^/]+$/.test(path)) return "/campaigns/:id";
+    if(/^\/flows\/[^/]+$/.test(path)) return "/flows/:id";
+    return "/";
+  }
+  function parentOf(key){
+    if(key==="/subscribers/:id") return "/subscribers";
+    if(key==="/campaigns/:id") return "/campaigns";
+    if(key==="/flows/:id") return "/campaigns";
+    return key;
+  }
+  function nav(path){ location.hash = "#"+path; }
+  window.nav = nav;
+  window.switchSub = function(gid,v){
+    document.querySelectorAll(`.subtab[data-g="${gid}"]`).forEach(b=>b.classList.toggle("active", b.dataset.v===v));
+    document.querySelectorAll(`.subpanel[data-g="${gid}"]`).forEach(p=>p.classList.toggle("active", p.dataset.v===v));
+  };
+  window.filterTable = function(input){
+    const card=input.closest(".card"), q=input.value.trim().toLowerCase();
+    card.querySelectorAll("tbody tr").forEach(tr=>{ tr.style.display = tr.textContent.toLowerCase().includes(q)?"":"none"; });
+  };
+
+  function renderSidebar(activeParent){
+    const groups = NAV.map(g=>`<div class="nav-label">${esc(g.heading)}</div>${g.items.map(it=>`<div class="nav-item ${it.path===activeParent?"active":""}" onclick="nav('${it.path}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${IC[it.icon]}</svg>${esc(it.label)}</div>`).join("")}`).join("");
+    document.getElementById("sidebar").innerHTML =
+      `<div class="brand"><div class="mark">M</div><div class="name">MarketBridge<small>RenoSafe growth</small></div></div>
+       ${groups}
+       <div class="spacer"></div>
+       <div class="nav-item ${activeParent==="/settings"?"active":""}" onclick="nav('/settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${IC.gear}</svg>Settings</div>
+       <div class="user"><div class="av">RM</div><div class="who">RenoSafe Ops<small>admin</small></div></div>`;
+  }
+
+  function render(){
+    uid=0;
+    const path=(location.hash||"#/").replace(/^#/,"")||"/";
+    const key=resolve(path);
+    const page=PAGES[key];
+    window.__back = page.back || null;
+    renderSidebar(parentOf(key));
+    const toolbar = page.toolbar ? `<div class="toolbar">${page.toolbar.search?`<input class="search" oninput="filterToolbar(this)" placeholder="Search subscribers...">`:""}${(page.toolbar.filters||[]).map(f=>`<span class="fchip">${esc(f)}</span>`).join("")}</div>` : "";
+    document.getElementById("content").innerHTML =
+      `<div class="page"><div class="page-head"><div><h1>${esc(page.h1)}</h1><p>${esc(page.subtitle)}</p></div><div class="range">Last 30 days <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div></div>${toolbar}${renderBlocks(page.blocks)}</div>`;
+    window.scrollTo(0,0);
+  }
+  window.filterToolbar = function(input){
+    const q=input.value.trim().toLowerCase();
+    const table=document.querySelector(".content table");
+    if(table) table.querySelectorAll("tbody tr").forEach(tr=>{ tr.style.display=tr.textContent.toLowerCase().includes(q)?"":"none"; });
+  };
+
+  window.addEventListener("hashchange", render);
+  render();
+  </script>
+</body>
+</html>
