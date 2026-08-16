@@ -577,37 +577,35 @@
       overview:[
         { type:"kpis", items:[
           { label:"Visitors", value:"3,240", delta:"up 8.2% vs last period", dir:"up", tone:"positive" },
-          { label:"Sign-ups", value:"201", delta:"up 24 vs last period", dir:"up", tone:"positive" },
-          { label:"Signup conversion", value:"6.2%", delta:"up 0.4pp", dir:"up", tone:"positive" },
-          { label:"Subscription rev (7d)", value:"$18,450", delta:"up 6.1%", dir:"up", tone:"positive" },
-          { label:"Active accounts (7d)", value:"412", delta:"up 18", dir:"up", tone:"positive" } ]},
+          { label:"Revenue", value:"$18,450", delta:"up 6.1% vs last period", dir:"up", tone:"positive" },
+          { label:"Conversion", value:"6.2%", delta:"up 0.4pp", dir:"up", tone:"positive" },
+          { label:"Avg Order Value", value:"$92", delta:"up $3 vs last period", dir:"up", tone:"positive" },
+          { label:"Total Members", value:"412", delta:"up 18 this period", dir:"up", tone:"positive" } ]},
         { type:"columns", ratio:"2-1", cols:[
-          [ { type:"lineChart", title:"Traffic & sign-ups - last 7 days", subtitle:"Sessions vs new sign-ups",
+          [ { type:"lineChart", title:"Events per day", subtitle:"Recent CDP activity",
               xAxis:["04 Aug","05 Aug","06 Aug","07 Aug","08 Aug","09 Aug","10 Aug"],
               series:[
-                { name:"Sessions", color:"#4F6AF5", data:[380,420,510,470,540,610,590] },
-                { name:"Sign-ups", color:"#10B981", data:[22,26,31,28,33,39,34] } ] } ],
+                { name:"Events", color:"#4F6AF5", data:[420,480,510,470,540,610,590] } ] } ],
           [ { type:"donut", title:"Traffic by source", subtitle:"Sessions by channel", centerTitle:"Sessions", centerValue:"3,240", slices:[
               { label:"App", value:48, color:"#4F6AF5", display:"48%" },
               { label:"Direct", value:27, color:"#8B5CF6", display:"27%" },
               { label:"Email", value:15, color:"#60A5FA", display:"15%" },
               { label:"Organic", value:10, color:"#D1D5DB", display:"10%" } ] } ] ]},
         { type:"tiles", title:"Insights", items:[
-          { label:"Top plan", value:"Business Pro", sub:"34 sign-ups this period" },
-          { label:"Abandoned sign-ups", value:"18", sub:"$1,620 recoverable" },
-          { label:"Peak activity", value:"7 - 9 PM", sub:"38% of daily events" },
-          { label:"Email vs Organic", value:"2x", sub:"Email converts at 2x organic" },
-          { label:"Repeat funders", value:"22%", sub:"of homeowners fund > 1 job" } ]},
+          { label:"Top event", value:"page_view", sub:"2,950 in the window" },
+          { label:"Total members", value:"412", sub:"across the club" },
+          { label:"Distinct events", value:"20", sub:"tracked event types" } ]},
         { type:"tiles", title:"Segments", items:[
-          { label:"Trial contractors", value:"34", sub:"up 12 this week" },
-          { label:"At-risk / dunning", value:"9", sub:"up 3 this week", tone:"negative" },
-          { label:"High-MRR (Enterprise)", value:"18", sub:"stable", tone:"positive" },
-          { label:"Active homeowners", value:"210", sub:"up 24 this week" } ]} ],
+          { label:"page_view", value:"2,950", sub:"1,210 members" },
+          { label:"session_start", value:"940", sub:"812 members" },
+          { label:"job_posted", value:"420", sub:"388 members" },
+          { label:"quote_submitted", value:"315", sub:"210 members" },
+          { label:"member_registered", value:"201", sub:"201 members" } ]} ],
       realtime:[
         { type:"kpis", items:[
           { label:"Live visitors", value:"37" },
           { label:"Events / 5 min", value:"142" },
-          { label:"Sign-ups / hr", value:"6" },
+          { label:"Orders / hr", value:"6" },
           { label:"Revenue / hr", value:"$780" } ]},
         { type:"columns", ratio:"1-2", cols:[
           [ { type:"barList", title:"Active users by country", subtitle:"37 active users - 4 countries", rows:[
@@ -618,13 +616,13 @@
           [ { type:"table", title:"Live activity", subtitle:"Most recent events across the platform (read-only)",
               columns:[{key:"time",label:"Time"},{key:"email",label:"Audience"},{key:"event",label:"Event"},{key:"value",label:"Value",align:"right"},{key:"location",label:"Location"}],
               rows:[
-                { time:"10 Aug 2026 07:45 PM", email:"brazil@buildright.com.au", event:"milestone_funded", value:"$4,000", location:"Sydney, Australia" },
+                { time:"10 Aug 2026 07:45 PM", email:"brazil@buildright.com.au", event:"milestone_approved", value:"-", location:"Sydney, Australia" },
                 { time:"10 Aug 2026 07:44 PM", email:"owner12@renohome.com.au", event:"job_posted", value:"-", location:"Melbourne, Australia" },
                 { time:"10 Aug 2026 07:42 PM", email:"kenya@renovations.com.au", event:"quote_submitted", value:"-", location:"Sylhet, Bangladesh" },
-                { time:"10 Aug 2026 07:41 PM", email:"sarah@buildright.com.au", event:"subscription_created", value:"$50", location:"Brisbane, Australia" },
+                { time:"10 Aug 2026 07:41 PM", email:"sarah@buildright.com.au", event:"subscription_activated", value:"-", location:"Brisbane, Australia" },
                 { time:"10 Aug 2026 07:40 PM", email:"guest", event:"page_view", value:"-", location:"Auckland, New Zealand" },
-                { time:"10 Aug 2026 07:39 PM", email:"tom@bradleybuild.com.au", event:"escrow_released", value:"$4,000", location:"Sydney, Australia" },
-                { time:"10 Aug 2026 07:38 PM", email:"guest", event:"sign_up", value:"-", location:"Dhaka, Bangladesh" },
+                { time:"10 Aug 2026 07:39 PM", email:"tom@bradleybuild.com.au", event:"quote_accepted", value:"-", location:"Sydney, Australia" },
+                { time:"10 Aug 2026 07:38 PM", email:"guest", event:"member_registered", value:"-", location:"Dhaka, Bangladesh" },
                 { time:"10 Aug 2026 07:36 PM", email:"aisha@patelhomes.com.au", event:"page_view", value:"-", location:"Perth, Australia" } ] } ] ]} ],
       traffic:[
         { type:"table", title:"Traffic by source", subtitle:"Sessions, visitors, revenue and return by channel",
@@ -647,29 +645,27 @@
               { label:"Organic", value:1500, color:"#D1D5DB", display:"$1,500" } ] } ] ]} ],
       funnels:[
         { type:"funnel", cards:[
-          { title:"Contractor sign-up", subtitle:"Visit -> Sign up -> Plan selected -> Subscription active",
+          { title:"Delivery funnel", subtitle:"Job posted -> Quote submitted -> Quote accepted -> Milestone approved",
             steps:[
-              { label:"Visit", count:3240, pct:100 },
-              { label:"Sign up", count:201, pct:6.2, dropNote:"3,039 left (94% drop)" },
-              { label:"Plan selected", count:168, pct:5.2, dropNote:"33 left (16% drop)" },
-              { label:"Subscription active", count:149, pct:4.6, dropNote:"19 left (11% drop)", isFinal:true } ],
-            overallRate:"4.6%", biggestDropoff:"Visit -> Sign up (94% drop)" },
-          { title:"Homeowner job funding", subtitle:"Visit -> Post job -> Accept quote -> Fund escrow",
+              { label:"job_posted", count:420, pct:100 },
+              { label:"quote_submitted", count:315, pct:75, dropNote:"105 left (25% drop)" },
+              { label:"quote_accepted", count:198, pct:47, dropNote:"117 left (37% drop)" },
+              { label:"milestone_approved", count:156, pct:37, dropNote:"42 left (21% drop)", isFinal:true } ],
+            overallRate:"37%", biggestDropoff:"quote_submitted -> quote_accepted (37% drop)" },
+          { title:"Signup funnel", subtitle:"Member registered -> Subscription activated",
             steps:[
-              { label:"Visit", count:2110, pct:100 },
-              { label:"Post job", count:420, pct:19.9, dropNote:"1,690 left (80% drop)" },
-              { label:"Accept quote", count:198, pct:9.4, dropNote:"222 left (53% drop)" },
-              { label:"Fund escrow", count:156, pct:7.4, dropNote:"42 left (21% drop)", isFinal:true } ],
-            overallRate:"7.4%", biggestDropoff:"Visit -> Post job (80% drop)" } ] } ],
+              { label:"member_registered", count:201, pct:100 },
+              { label:"subscription_activated", count:149, pct:74, dropNote:"52 left (26% drop)", isFinal:true } ],
+            overallRate:"74%", biggestDropoff:"member_registered -> subscription_activated (26% drop)" } ] } ],
       events:[
         { type:"lineChart", title:"Event volume - last 7 days", subtitle:"Top events by day",
           xAxis:["04 Aug","05 Aug","06 Aug","07 Aug","08 Aug","09 Aug","10 Aug"],
           series:[
             { name:"page_view", color:"#4F6AF5", data:[380,420,510,470,540,610,590] },
-            { name:"sign_up", color:"#10B981", data:[22,26,31,28,33,39,34] },
+            { name:"member_registered", color:"#10B981", data:[22,26,31,28,33,39,34] },
             { name:"job_posted", color:"#8B5CF6", data:[48,52,61,55,66,71,67] },
-            { name:"milestone_funded", color:"#D97706", data:[9,12,14,11,13,16,13] },
-            { name:"escrow_released", color:"#60A5FA", data:[7,10,11,9,12,13,10] } ] },
+            { name:"quote_submitted", color:"#D97706", data:[30,38,44,40,52,58,49] },
+            { name:"milestone_approved", color:"#60A5FA", data:[7,10,11,9,12,13,10] } ] },
         { type:"table", title:"Event catalogue", subtitle:"Every tracked CDP event and its volume (read-only)", search:true,
           columns:[{key:"name",label:"Event name"},{key:"countDisplay",label:"Count",align:"right"},{key:"users",label:"Users",align:"right"},{key:"perUser",label:"Per user",align:"right"},{key:"revenue",label:"Revenue",align:"right"}],
           rows:[
@@ -678,11 +674,12 @@
             { name:"job_viewed", countDisplay:"720 (10.8%)", users:"540", perUser:"1.33", revenue:"$0.00" },
             { name:"job_posted", countDisplay:"420 (6.3%)", users:"388", perUser:"1.08", revenue:"$0.00" },
             { name:"quote_submitted", countDisplay:"315 (4.7%)", users:"210", perUser:"1.50", revenue:"$0.00" },
-            { name:"sign_up", countDisplay:"201 (3.0%)", users:"201", perUser:"1.00", revenue:"$0.00" },
-            { name:"subscription_created", countDisplay:"149 (2.2%)", users:"149", perUser:"1.00", revenue:"$7,300.00" },
-            { name:"milestone_funded", countDisplay:"88 (1.3%)", users:"74", perUser:"1.19", revenue:"$0.00" },
-            { name:"escrow_released", countDisplay:"72 (1.1%)", users:"66", perUser:"1.09", revenue:"$0.00" },
-            { name:"app_crashed", countDisplay:"14 (0.2%)", users:"12", perUser:"1.17", revenue:"$0.00" } ] } ]
+            { name:"member_registered", countDisplay:"201 (3.0%)", users:"201", perUser:"1.00", revenue:"$0.00" },
+            { name:"quote_accepted", countDisplay:"198 (3.0%)", users:"156", perUser:"1.27", revenue:"$0.00" },
+            { name:"milestone_approved", countDisplay:"156 (2.3%)", users:"132", perUser:"1.18", revenue:"$0.00" },
+            { name:"subscription_activated", countDisplay:"149 (2.2%)", users:"149", perUser:"1.00", revenue:"$0.00" },
+            { name:"evidence_submitted", countDisplay:"88 (1.3%)", users:"74", perUser:"1.19", revenue:"$0.00" },
+            { name:"variation_recorded", countDisplay:"64 (1.0%)", users:"58", perUser:"1.10", revenue:"$0.00" } ] } ]
     } }
   ]},
 

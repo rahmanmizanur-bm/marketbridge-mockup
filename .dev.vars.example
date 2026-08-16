@@ -1,0 +1,4 @@
+# Copy to `.dev.vars` (gitignored) for local `wrangler pages dev`.
+# In production these are set as Cloudflare Pages env vars / secrets, not from this file.
+BASIC_AUTH_USER=demo
+BASIC_AUTH_PASS=change-me

@@ -1,0 +1,9 @@
+{
+  // Cloudflare Pages project config for the MarketBridge mockup.
+  // The static output is the repo root (index.html); `functions/` is auto-detected and
+  // runs the Basic Auth _middleware at the edge. Credentials are Pages env vars/secrets
+  // (BASIC_AUTH_USER / BASIC_AUTH_PASS), never committed here.
+  "name": "marketbridge-mockup",
+  "compatibility_date": "2026-08-16",
+  "pages_build_output_dir": "."
+}

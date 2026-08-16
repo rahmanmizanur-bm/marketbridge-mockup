@@ -1,0 +1,4 @@
+# Cloudflare / wrangler local secrets - NEVER commit real credentials.
+.dev.vars
+.wrangler/
+node_modules/
